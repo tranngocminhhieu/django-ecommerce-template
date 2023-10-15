@@ -1,0 +1,23 @@
+{% load static %}
+<section class="container mb-5">
+    <div class="tns-carousel border-end">
+        <div class="tns-outer" id="tns2-ow">
+            <div aria-atomic="true" aria-live="polite" class="tns-liveregion tns-visually-hidden">slide <span class="current">14 to 17</span> of 8</div>
+            <div class="tns-ovh" id="tns2-mw">
+                <div class="tns-inner" id="tns2-iw">
+                    <div class="tns-carousel-inner tns-slider tns-carousel tns-subpixel tns-calc tns-horizontal"
+                         data-carousel-options='{ "nav": false, "controls": false, "autoplay": true, "autoplayTimeout": 4000, "loop": true, "responsive": {"0":{"items":1},"360":{"items":2},"600":{"items":3},"991":{"items":4},"1200":{"items":4}} }'
+                         id="tns2" style="transform: translate3d(-65%, 0px, 0px);">
+
+                        {% for brand in brands %}
+                        <div aria-hidden="true" class="tns-item tns-slide-cloned" tabindex="-1"><a class="d-block bg-white border py-4 py-sm-5 px-2" href="#" style="margin-right: -.0625rem;">
+                            <img alt="Brand" class="d-block mx-auto" src="{{ brand.image.url }}" style="width: 165px;"/></a>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

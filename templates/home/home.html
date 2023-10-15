@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <!-- Hero (Banners + Slider)-->
+    {% include 'home/sections/hero.html' %}
+
+    <!-- Products grid (Trending products)-->
+    {% include 'home/sections/product_grid.html' %}
+    {% include 'home/quick_view_modal.html' %}
+
+    <!-- Promo banner-->
+    {% include 'home/sections/promo_banner.html' %}
+
+    <!-- Brands carousel-->
+    {% include 'home/sections/brand_carousel.html' %}
+
+    <!-- Product widgets-->
+    {% include 'home/sections/product_widget.html' %}
+
+    <!-- YouTube feed-->
+    {% include 'home/sections/youtube_feed.html' %}
+
+    <!-- Blog + Instagram info cards-->
+    {% include 'home/sections/blog_instagram_cards.html' %}
+{% endblock %}
