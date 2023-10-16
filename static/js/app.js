@@ -37,26 +37,23 @@ signUpForm.addEventListener('submit', async (e) => {
             headers: {'X-CSRFToken': csrftoken}
         });
 
+        const alertDiv = document.createElement('div');
+        alertDiv.classList.add("alert", "alert-dismissible", "fade", "show");
+
         if (response.status === 201) {
-            alertMessage.className = "alert alert-success alert-dismissible fade show mt-5";
-            alertMessage.innerHTML = 'Signup successful!' +
-                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-            alertMessage.style.display = "block";
+            alertDiv.innerHTML = 'Signup successful!';
+            alertDiv.classList.add("alert-success");
         } else {
             const data = await response.json();
-            let errorMessage = '';
-            for (const field in data) {
-                if (data.hasOwnProperty(field)) {
-                    errorMessage += `${data[field][0]} `;
-                }
-            }
-            alertMessage.className = "alert alert-danger alert-dismissible fade show mt-5";
-            alertMessage.innerHTML = errorMessage +
-                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-            alertMessage.style.display = "block";
+            const errorMessage = Object.values(data).map(errors => errors[0]).join(' ');
+            alertDiv.innerHTML = errorMessage;
+            alertDiv.classList.add("alert-danger");
         }
+
+        alertDiv.innerHTML += '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+        alertMessage.appendChild(alertDiv);
+        alertMessage.style.display = "block";
     } catch (error) {
         console.error('Error:', error);
     }
 });
-
