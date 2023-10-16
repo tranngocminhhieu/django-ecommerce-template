@@ -12,9 +12,9 @@
             <div class="modal-body tab-content py-4">
                 <form class="needs-validation tab-pane fade show active" autocomplete="off" novalidate id="signin-tab">
                     <div class="mb-3">
-                        <label class="form-label" for="si-email">Email address</label>
-                        <input class="form-control" type="email" id="si-email" placeholder="johndoe@example.com" required>
-                        <div class="invalid-feedback">Please provide a valid email address.</div>
+                        <label class="form-label" for="si-email">Username</label>
+                        <input class="form-control" type="text" id="si-email" placeholder="Username" required>
+                        <div class="invalid-feedback">Please provide a valid username.</div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="si-password">Password</label>
@@ -32,23 +32,23 @@
                         </div>
                         <a class="fs-sm" href="#">Forgot password?</a>
                     </div>
-                    <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign in</button>
+                    <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign in</button> <!-- Change submit to button to avoid boostrap modal close after click -->
                 </form>
                 <form class="needs-validation tab-pane fade" autocomplete="off" novalidate id="signup-tab">
                     <div class="mb-3">
-                        <label class="form-label" for="su-name">Full name</label>
-                        <input class="form-control" type="text" id="su-name" placeholder="John Doe" required>
-                        <div class="invalid-feedback">Please fill in your name.</div>
+                        <label class="form-label" for="su-username">Username</label>
+                        <input class="form-control" type="text" id="su-username" placeholder="johndoe" name="username" required>
+                        <div class="invalid-feedback">Please fill in your username.</div>
                     </div>
                     <div class="mb-3">
                         <label for="su-email">Email address</label>
-                        <input class="form-control" type="email" id="su-email" placeholder="johndoe@example.com" required>
+                        <input class="form-control" type="email" id="su-email" placeholder="johndoe@example.com" name="email" required>
                         <div class="invalid-feedback">Please provide a valid email address.</div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="su-password">Password</label>
                         <div class="password-toggle">
-                            <input class="form-control" type="password" id="su-password" required>
+                            <input class="form-control" type="password" id="su-password" name="password" required>
                             <label class="password-toggle-btn" aria-label="Show/hide password">
                                 <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
                             </label>
@@ -61,10 +61,15 @@
                             <label class="password-toggle-btn" aria-label="Show/hide password">
                                 <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
                             </label>
+                            <div class="invalid-feedback" id="password-mismatch">Confirm password is not match.</div>
+
                         </div>
                     </div>
                     <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign up</button>
                 </form>
+
+                <div id="signup-status-alert" style="display: none"></div>
+
             </div>
         </div>
     </div>

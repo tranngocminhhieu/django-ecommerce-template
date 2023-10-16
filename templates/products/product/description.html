@@ -1,3 +1,4 @@
+{% load static %}
 <div class="container">
     <div class="bg-light shadow-lg rounded-3">
         <!-- Tabs-->
@@ -7,7 +8,7 @@
             <li class="nav-item" role="presentation"><a class="nav-link py-4 px-sm-4" href="#specs" data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1"><span
                     class="d-none d-sm-inline">Tech</span> Specs</a></li>
             <li class="nav-item" role="presentation"><a class="nav-link py-4 px-sm-4" href="#reviews" data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">Reviews <span
-                    class="fs-sm opacity-60">(74)</span></a></li>
+                    class="fs-sm opacity-60">({{ reviews.count }})</span></a></li>
         </ul>
         <div class="px-4 pt-lg-3 pb-3 mb-5">
             <div class="tab-content px-lg-3">
@@ -58,15 +59,17 @@
                         <!-- Product details-->
                         <div class="col-lg-5 pt-4 pt-lg-0">
                             <div class="product-details ms-auto pb-3">
-                                <div class="h3 fw-normal text-accent mb-3 me-1">$124.<small>99</small></div>
+                                <div class="h3 fw-normal text-accent mb-3 me-1">${{ main_price.price|floatformat:2 }}</div>
                                 <div class="fs-sm mb-4"><span class="text-heading fw-medium me-1">Color:</span><span class="text-muted" id="colorOption">Dark blue/Orange</span></div>
                                 <div class="position-relative me-n4 mb-3">
 
                                     {% for color in product_colors %}
-                                    <div class="form-check form-option form-check-inline mb-2">
-                                        <input class="form-check-input" type="radio" name="color" id="color-{{ color.color.id }}" data-bs-label="colorOption" value="{{ color.color.name }}" {% if forloop.first %}checked{% endif %}>
-                                        <label class="form-option-label rounded-circle" for="color-{{ color.color.id }}"><span class="form-option-color rounded-circle" style="background-color: {{ color.color.color_code }};"></span></label>
-                                    </div>
+                                        <div class="form-check form-option form-check-inline mb-2">
+                                            <input class="form-check-input" type="radio" name="color" id="color-{{ color.color.id }}" data-bs-label="colorOption" value="{{ color.color.name }}"
+                                                   {% if forloop.first %}checked{% endif %}>
+                                            <label class="form-option-label rounded-circle" for="color-{{ color.color.id }}"><span class="form-option-color rounded-circle"
+                                                                                                                                   style="background-color: {{ color.color.color_code }};"></span></label>
+                                        </div>
                                     {% endfor %}
 
                                     <div class="product-badge product-available mt-n1"><i class="ci-security-check"></i>Product available</div>
@@ -79,9 +82,10 @@
                                         <label class="form-label" for="product-size">Version:</label>
                                     </div>
                                     <select class="form-select" required="" id="product-size">
-{#                                        <option value="">Select size</option>#}
+                                        {#                                        <option value="">Select size</option>#}
+                                        <option value="{{ main_price.version.name }}">{{ main_price.version.name }}</option>
                                         {% for ver in versions %}
-                                        <option value="{{ ver.name }}">{{ ver.name }}</option>
+                                            <option value="{{ ver.name }}">{{ ver.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -170,7 +174,7 @@
                         <div class="d-flex align-items-center me-md-3"><img src="{{ product.image.url }}" width="90" alt="Product thumb">
                             <div class="ps-3">
                                 <h6 class="fs-base mb-2">{{ product.name }}</h6>
-                                <div class="h4 fw-normal text-accent">$124.<small>99</small></div>
+                                <div class="h4 fw-normal text-accent">${{ main_price.price|floatformat:2 }}</div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center pt-3">
@@ -194,56 +198,34 @@
                     </div>
                     <!-- Specs table-->
                     <div class="row pt-2">
+
+                    {% for dict in main_price.version.get_split_tech_specs %}
+
                         <div class="col-lg-5 col-sm-6">
-                            <h3 class="h6">General specs</h3>
+                            {% for heading, info in dict.items %}
+                            <h3 class="h6">{{ heading }}</h3>
                             <ul class="list-unstyled fs-sm pb-2">
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Model:</span><span>Amazfit Smartwatch</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Gender:</span><span>Unisex</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Smartphone app:</span><span>Amazfit Watch</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">OS campitibility:</span><span>Android / iOS</span></li>
+                                {% for detail, value in info.items %}
+                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">{{ detail }}:</span><span>{{ value }}</span></li>
+                                {% endfor %}
                             </ul>
-                            <h3 class="h6">Physical specs</h3>
-                            <ul class="list-unstyled fs-sm pb-2">
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Shape:</span><span>Rectangular</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Body material:</span><span>Plastics / Ceramics</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Band material:</span><span>Silicone</span></li>
-                            </ul>
-                            <h3 class="h6">Display</h3>
-                            <ul class="list-unstyled fs-sm pb-2">
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Display type:</span><span>Color</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Display size:</span><span>1.28"</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Screen resolution:</span><span>176 x 176</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Touch screen:</span><span>No</span></li>
-                            </ul>
+                            {% endfor %}
                         </div>
-                        <div class="col-lg-5 col-sm-6 offset-lg-1">
-                            <h3 class="h6">Functions</h3>
-                            <ul class="list-unstyled fs-sm pb-2">
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Phone calls:</span><span>Incoming call notification</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Monitoring:</span><span>Heart rate / Physical activity</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">GPS support:</span><span>Yes</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Sensors:</span><span>Heart rate, Gyroscope, Geomagnetic, Light sensor</span></li>
-                            </ul>
-                            <h3 class="h6">Battery</h3>
-                            <ul class="list-unstyled fs-sm pb-2">
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Battery:</span><span>Li-Pol</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Battery capacity:</span><span>190 mAh</span></li>
-                            </ul>
-                            <h3 class="h6">Dimensions</h3>
-                            <ul class="list-unstyled fs-sm pb-2">
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Dimensions:</span><span>195 x 20 mm</span></li>
-                                <li class="d-flex justify-content-between pb-2 border-bottom"><span class="text-muted">Weight:</span><span>32 g</span></li>
-                            </ul>
-                        </div>
+
+                    {% endfor %}
+
+
+
+
                     </div>
                 </div>
                 <!-- Reviews tab-->
                 <div class="tab-pane fade" id="reviews" role="tabpanel">
                     <div class="d-md-flex justify-content-between align-items-start pb-4 mb-4 border-bottom">
-                        <div class="d-flex align-items-center me-md-3"><img src="img/shop/single/gallery/th05.jpg" width="90" alt="Product thumb">
+                        <div class="d-flex align-items-center me-md-3"><img src="{{ product.image.url }}" width="90" alt="Product thumb">
                             <div class="ps-3">
-                                <h6 class="fs-base mb-2">Smartwatch Youth Edition</h6>
-                                <div class="h4 fw-normal text-accent">$124.<small>99</small></div>
+                                <h6 class="fs-base mb-2">{{ product.name }}</h6>
+                                <div class="h4 fw-normal text-accent">${{ main_price.price|floatformat:2 }}</div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center pt-3">
@@ -268,57 +250,73 @@
                     <!-- Reviews-->
                     <div class="row pt-2 pb-3">
                         <div class="col-lg-4 col-md-5">
-                            <h2 class="h3 mb-4">74 Reviews</h2>
-                            <div class="star-rating me-2"><i class="ci-star-filled fs-sm text-accent me-1"></i><i class="ci-star-filled fs-sm text-accent me-1"></i><i
-                                    class="ci-star-filled fs-sm text-accent me-1"></i><i class="ci-star-filled fs-sm text-accent me-1"></i><i class="ci-star fs-sm text-muted me-1"></i></div>
-                            <span class="d-inline-block align-middle">4.1 Overall rating</span>
-                            <p class="pt-3 fs-sm text-muted">58 out of 74 (77%)<br>Customers recommended this product</p>
+                            <h2 class="h3 mb-4">{{ reviews.count }} Review{% if reviews.count > 1 %}s{% endif %}</h2>
+                            <div class="star-rating me-2">
+                                {% for star in product.get_stars %}
+                                    {% if star == 1 %}
+                                        <i class="ci-star-filled fs-sm text-accent me-1"></i>
+                                    {% elif star == 0.5 %}
+                                        <i class="ci-star-half fs-sm text-accent me-1"></i>
+                                    {% else %}
+                                        <i class="ci-star fs-sm text-muted me-1"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <span class="d-inline-block align-middle">{{ product.get_avg_ratings }} Overall rating</span>
+                            <p class="pt-3 fs-sm text-muted">
+                                {% if product.get_avg_ratings > 0 %}
+                                    {{ review_stars_detail.3.count|add:review_stars_detail.4.count|add:review_stars_detail.5.count }} out of {{ reviews.count }} ({{ recommended_percent }}%)<br>Customers recommended this product
+                                {% else %}
+                                    Become the first reviewer
+                                {% endif %}
+                            </p>
                         </div>
                         <div class="col-lg-8 col-md-7">
                             <div class="d-flex align-items-center mb-2">
                                 <div class="text-nowrap me-3"><span class="d-inline-block align-middle text-muted">5</span><i class="ci-star-filled fs-xs ms-1"></i></div>
                                 <div class="w-100">
                                     <div class="progress" style="height: 4px;">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ review_stars_detail.5.percent }}%;" aria-valuenow="{{ review_stars_detail.5.percent }}" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
-                                <span class="text-muted ms-3">43</span>
+                                <span class="text-muted ms-3">{{ review_stars_detail.5.count }}</span>
                             </div>
                             <div class="d-flex align-items-center mb-2">
                                 <div class="text-nowrap me-3"><span class="d-inline-block align-middle text-muted">4</span><i class="ci-star-filled fs-xs ms-1"></i></div>
                                 <div class="w-100">
                                     <div class="progress" style="height: 4px;">
-                                        <div class="progress-bar" role="progressbar" style="width: 27%; background-color: #a7e453;" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: {{ review_stars_detail.4.percent }}%; background-color: #a7e453;" aria-valuenow="{{ review_stars_detail.4.percent }}" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
-                                <span class="text-muted ms-3">16</span>
+                                <span class="text-muted ms-3">{{ review_stars_detail.4.count }}</span>
                             </div>
                             <div class="d-flex align-items-center mb-2">
                                 <div class="text-nowrap me-3"><span class="d-inline-block align-middle text-muted">3</span><i class="ci-star-filled fs-xs ms-1"></i></div>
                                 <div class="w-100">
                                     <div class="progress" style="height: 4px;">
-                                        <div class="progress-bar" role="progressbar" style="width: 17%; background-color: #ffda75;" aria-valuenow="17" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: {{ review_stars_detail.3.percent }}%; background-color: #ffda75;" aria-valuenow="{{ review_stars_detail.3.percent }}" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
-                                <span class="text-muted ms-3">9</span>
+                                <span class="text-muted ms-3">{{ review_stars_detail.3.count }}</span>
                             </div>
                             <div class="d-flex align-items-center mb-2">
                                 <div class="text-nowrap me-3"><span class="d-inline-block align-middle text-muted">2</span><i class="ci-star-filled fs-xs ms-1"></i></div>
                                 <div class="w-100">
                                     <div class="progress" style="height: 4px;">
-                                        <div class="progress-bar" role="progressbar" style="width: 9%; background-color: #fea569;" aria-valuenow="9" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: {{ review_stars_detail.2.percent }}%; background-color: #fea569;" aria-valuenow="{{ review_stars_detail.2.percent }}" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
-                                <span class="text-muted ms-3">4</span>
+                                <span class="text-muted ms-3">{{ review_stars_detail.2.count }}</span>
                             </div>
                             <div class="d-flex align-items-center">
                                 <div class="text-nowrap me-3"><span class="d-inline-block align-middle text-muted">1</span><i class="ci-star-filled fs-xs ms-1"></i></div>
                                 <div class="w-100">
                                     <div class="progress" style="height: 4px;">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 4%;" aria-valuenow="4" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ review_stars_detail.1.percent }}%;" aria-valuenow="{{ review_stars_detail.1.percent }}" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
-                                <span class="text-muted ms-3">2</span>
+                                <span class="text-muted ms-3">{{ review_stars_detail.1.count }}</span>
                             </div>
                         </div>
                     </div>
@@ -339,84 +337,41 @@
                                 </div>
                             </div>
                             <!-- Review-->
+                            {% for review in reviews %}
                             <div class="product-review pb-4 mb-4 border-bottom">
                                 <div class="d-flex mb-3">
-                                    <div class="d-flex align-items-center me-4 pe-2"><img class="rounded-circle" src="img/shop/reviews/01.jpg" width="50" alt="Rafael Marquez">
+                                    <div class="d-flex align-items-center me-4 pe-2"><img class="rounded-circle" src="{% static 'img/shop/reviews/01.jpg' %}" width="50" alt="Rafael Marquez">
                                         <div class="ps-3">
-                                            <h6 class="fs-sm mb-0">Rafael Marquez</h6><span class="fs-ms text-muted">June 28, 2019</span>
+                                            <h6 class="fs-sm mb-0">{{ review.user.first_name }} {{ review.user.last_name }}</h6><span class="fs-ms text-muted">{{ review.created_at }}</span>
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i
-                                                class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star"></i>
+                                        <div class="star-rating">
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= review.rating %}
+                                                    <i class="star-rating-icon ci-star-filled active"></i>
+                                                {% else %}
+                                                    <i class="star-rating-icon ci-star"></i>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
-                                        <div class="fs-ms text-muted">83% of users found this review helpful</div>
+{#                                        <div class="fs-ms text-muted">83% of users found this review helpful</div>#}
+
                                     </div>
                                 </div>
-                                <p class="fs-md mb-2">Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas
-                                    assumenda est...</p>
+                                <p class="fs-md mb-2">{{ review.content }}</p>
                                 <ul class="list-unstyled fs-ms pt-1">
-                                    <li class="mb-1"><span class="fw-medium">Pros:&nbsp;</span>Consequuntur magni, voluptatem sequi, tempora</li>
-                                    <li class="mb-1"><span class="fw-medium">Cons:&nbsp;</span>Architecto beatae, quis autem</li>
+                                    <li class="mb-1"><span class="fw-medium">Pros:&nbsp;</span>{{ review.pros }}</li>
+                                    <li class="mb-1"><span class="fw-medium">Cons:&nbsp;</span>{{ review.cons }}</li>
                                 </ul>
-                                <div class="text-nowrap">
-                                    <button class="btn-like" type="button">15</button>
-                                    <button class="btn-dislike" type="button">3</button>
-                                </div>
+{#                                <div class="text-nowrap">#}
+{#                                    <button class="btn-like" type="button">15</button>#}
+{#                                    <button class="btn-dislike" type="button">3</button>#}
+{#                                </div>#}
                             </div>
-                            <!-- Review-->
-                            <div class="product-review pb-4 mb-4 border-bottom">
-                                <div class="d-flex mb-3">
-                                    <div class="d-flex align-items-center me-4 pe-2"><img class="rounded-circle" src="img/shop/reviews/02.jpg" width="50" alt="Barbara Palson">
-                                        <div class="ps-3">
-                                            <h6 class="fs-sm mb-0">Barbara Palson</h6><span class="fs-ms text-muted">May 17, 2019</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i
-                                                class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i
-                                                class="star-rating-icon ci-star-filled active"></i>
-                                        </div>
-                                        <div class="fs-ms text-muted">99% of users found this review helpful</div>
-                                    </div>
-                                </div>
-                                <p class="fs-md mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                <ul class="list-unstyled fs-ms pt-1">
-                                    <li class="mb-1"><span class="fw-medium">Pros:&nbsp;</span>Consequuntur magni, voluptatem sequi, tempora</li>
-                                    <li class="mb-1"><span class="fw-medium">Cons:&nbsp;</span>Architecto beatae, quis autem</li>
-                                </ul>
-                                <div class="text-nowrap">
-                                    <button class="btn-like" type="button">34</button>
-                                    <button class="btn-dislike" type="button">1</button>
-                                </div>
-                            </div>
-                            <!-- Review-->
-                            <div class="product-review pb-4 mb-4 border-bottom">
-                                <div class="d-flex mb-3">
-                                    <div class="d-flex align-items-center me-4 pe-2"><img class="rounded-circle" src="img/shop/reviews/03.jpg" width="50" alt="Daniel Adams">
-                                        <div class="ps-3">
-                                            <h6 class="fs-sm mb-0">Daniel Adams</h6><span class="fs-ms text-muted">May 8, 2019</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i
-                                                class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i>
-                                        </div>
-                                        <div class="fs-ms text-muted">75% of users found this review helpful</div>
-                                    </div>
-                                </div>
-                                <p class="fs-md mb-2">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
-                                    inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem.</p>
-                                <ul class="list-unstyled fs-ms pt-1">
-                                    <li class="mb-1"><span class="fw-medium">Pros:&nbsp;</span>Consequuntur magni, voluptatem sequi</li>
-                                    <li class="mb-1"><span class="fw-medium">Cons:&nbsp;</span>Architecto beatae, quis autem, voluptatem sequ</li>
-                                </ul>
-                                <div class="text-nowrap">
-                                    <button class="btn-like" type="button">26</button>
-                                    <button class="btn-dislike" type="button">9</button>
-                                </div>
-                            </div>
+                            {% endfor %}
+
+
                             <div class="text-center">
                                 <button class="btn btn-outline-accent" type="button"><i class="ci-reload me-2"></i>Load more reviews</button>
                             </div>
