@@ -31,7 +31,7 @@ signUpForm.addEventListener('submit', async (e) => {
     }
 
     try {
-        const response = await fetch('/signup/api/signup/', {
+        const response = await fetch('/account/api/signup/', {
             method: "POST",
             body: new FormData(signUpForm),
             headers: {'X-CSRFToken': csrftoken}
@@ -45,7 +45,7 @@ signUpForm.addEventListener('submit', async (e) => {
             alertDiv.classList.add("alert-success");
         } else {
             const data = await response.json();
-            const errorMessage = Object.values(data).map(errors => errors[0]).join(' ');
+            const errorMessage = Object.values(data).map(errors => errors.join(' ')).join(' ');
             alertDiv.innerHTML = errorMessage;
             alertDiv.classList.add("alert-danger");
         }
