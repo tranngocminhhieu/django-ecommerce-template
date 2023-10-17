@@ -10,16 +10,17 @@
                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body tab-content py-4">
-                <form class="needs-validation tab-pane fade show active" autocomplete="off" novalidate id="signin-tab">
+                <form class="needs-validation tab-pane fade show active" autocomplete="off" novalidate id="signin-tab" action="{% url 'account:signin' %}" method="POST">
+                    {% csrf_token %}
                     <div class="mb-3">
                         <label class="form-label" for="si-email">Username</label>
-                        <input class="form-control" type="text" id="si-email" placeholder="Username" required>
+                        <input class="form-control" type="text" id="si-email" placeholder="Username" name="username" required>
                         <div class="invalid-feedback">Please provide a valid username.</div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="si-password">Password</label>
                         <div class="password-toggle">
-                            <input class="form-control" type="password" id="si-password" required>
+                            <input class="form-control" type="password" id="si-password" name="password" required>
                             <label class="password-toggle-btn" aria-label="Show/hide password">
                                 <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
                             </label>
@@ -34,6 +35,7 @@
                     </div>
                     <button class="btn btn-primary btn-shadow d-block w-100" type="submit">Sign in</button> <!-- Change submit to button to avoid boostrap modal close after click -->
                 </form>
+
                 <form class="needs-validation tab-pane fade" autocomplete="off" novalidate id="signup-tab">
                     <div class="mb-3">
                         <label class="form-label" for="su-username">Username</label>

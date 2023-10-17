@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Home{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery/css/lightgallery-bundle.min.css' %}"/>
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'vendor/lightgallery/lightgallery.min.js' %}"></script>
+    <script src="{% static 'vendor/lightgallery/plugins/video/lg-video.min.js' %}"></script>
+{% endblock %}
 {% block content %}
     <!-- Hero (Banners + Slider)-->
     {% include 'home/sections/hero.html' %}

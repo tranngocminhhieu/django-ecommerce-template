@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Product, Gallery, Review,Version, ProductColor, Price
 from django.db.models import Q
-from django.db.models import Avg, F, Case, When, Value, IntegerField
+from django.db.models import Avg, F, Case, When, Value, IntegerField, Max
 
 # Create your views here.
 def product(request, slug):
@@ -20,14 +20,14 @@ def product(request, slug):
     total_reviews = reviews.count()
 
     review_stars_detail = {
-        1: {'count': star1, 'percent': round((star1 / total_reviews)*100)},
-        2: {'count': star2, 'percent': round((star2 / total_reviews)*100)},
-        3: {'count': star3, 'percent': round((star3 / total_reviews)*100)},
-        4: {'count': star4, 'percent': round((star4 / total_reviews)*100)},
-        5: {'count': star5, 'percent': round((star5 / total_reviews)*100)},
+        1: {'count': star1, 'percent': round((star1 / total_reviews)*100)} if total_reviews != 0 else 0,
+        2: {'count': star2, 'percent': round((star2 / total_reviews)*100)} if total_reviews != 0 else 0,
+        3: {'count': star3, 'percent': round((star3 / total_reviews)*100)} if total_reviews != 0 else 0,
+        4: {'count': star4, 'percent': round((star4 / total_reviews)*100)} if total_reviews != 0 else 0,
+        5: {'count': star5, 'percent': round((star5 / total_reviews)*100)} if total_reviews != 0 else 0,
     }
 
-    recommended_percent = round(((star3 + star4 + star5) / total_reviews)*100)
+    recommended_percent = round(((star3 + star4 + star5) / total_reviews)*100) if total_reviews != 0 else 0
 
     related_products = Product.objects.filter(Q(categories__in=product.categories.all()) | Q(brand=product.brand)).exclude(slug=product.slug)
     context = {
@@ -42,3 +42,18 @@ def product(request, slug):
         'recommended_percent': recommended_percent
     }
     return render(request=request, template_name='products/product/index.html', context=context)
+
+def products(request):
+    products = Product.objects.all()
+
+    max_price = Price.objects.filter(product_id__in=products).aggregate(Max('price')).get('price__max')
+
+    context = {
+        'products': products,
+        'max_price': max_price
+    }
+    view = request.GET.get('view')
+    if view == 'list':
+        return render(request=request, template_name='products/products_list.html', context=context)
+    else:
+        return render(request=request, template_name='products/products_grid.html', context=context)

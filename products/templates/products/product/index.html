@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery/css/lightgallery-bundle.min.css' %}"/>
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'vendor/lightgallery/lightgallery.min.js' %}"></script>
+    <script src="{% static 'vendor/lightgallery/plugins/video/lg-video.min.js' %}"></script>
+{% endblock %}
 {% block content %}
 <!-- Custom page title-->
 <div class="page-title-overlap bg-dark pt-4">

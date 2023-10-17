@@ -21,7 +21,11 @@
     <link rel="stylesheet" media="screen" href="{% static 'vendor/simplebar/dist/simplebar.min.css' %}"/>
     <link rel="stylesheet" media="screen" href="{% static 'vendor/tiny-slider/dist/tiny-slider.css' %}"/>
     <link rel="stylesheet" media="screen" href="{% static 'vendor/drift-zoom/dist/drift-basic.min.css' %}"/>
-    <link rel="stylesheet" media="screen" href="{% static 'vendor/lightgallery/css/lightgallery-bundle.min.css' %}"/>
+
+    {% block extra_css %}{% endblock %}
+
+
+
     <!-- Main Theme Styles + Bootstrap-->
     <link rel="stylesheet" media="screen" href="{% static 'css/theme.min.css' %}">
 
@@ -30,7 +34,10 @@
 <!-- Body-->
 <body class="handheld-toolbar-enabled">
 <!-- Sign in / sign up modal-->
-{% include 'signIn_signUp_popup.html' %}
+{% if not request.user.is_authenticated %}
+{% include 'signin_signup_modal.html' %}
+{% endif %}
+
 <main class="page-wrapper">
     <!-- Navbar Electronics Store-->
     {% include 'header.html' %}
@@ -54,8 +61,9 @@
 <script src="{% static 'vendor/tiny-slider/dist/min/tiny-slider.js' %}"></script>
 <script src="{% static 'vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js' %}"></script>
 <script src="{% static 'vendor/drift-zoom/dist/Drift.min.js' %}"></script>
-<script src="{% static 'vendor/lightgallery/lightgallery.min.js' %}"></script>
-<script src="{% static 'vendor/lightgallery/plugins/video/lg-video.min.js' %}"></script>
+
+{% block extra_js %}{% endblock %}
+
 <!-- Main theme script-->
 <script src="{% static 'js/theme.min.js' %}"></script>
 

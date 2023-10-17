@@ -25,5 +25,5 @@ def replace_src_attributes(file_path):
         file.write(str(soup))
 
 
-file_path = '/Users/minhkhue/Documents/GitHub/Personal-projects/electronics_store/templates/home/sections/blog_instagram_cards.html'
+file_path = '/Users/minhkhue/Documents/GitHub/Personal-projects/django-ecommerce-template/products/templates/products/products_grid.html'
 replace_src_attributes(file_path)
