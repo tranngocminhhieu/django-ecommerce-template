@@ -1,3 +1,9 @@
+function updateURL(param, value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set(param, value);
+    window.location.href = url.toString();
+}
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -13,6 +19,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
 const csrftoken = getCookie('csrftoken');
 
 // Sign up with modal form

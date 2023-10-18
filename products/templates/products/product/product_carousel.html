@@ -22,20 +22,9 @@
                                     <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">{{ product.categories.first }}</a>
                                         <h3 class="product-title fs-sm"><a href="{% url 'products:product' product.slug %}">{{ product.name }}</a></h3>
                                         <div class="d-flex justify-content-between">
-                                            <div class="product-price text-accent">${{ product.get_default_price }}</div>
+                                            <div class="product-price text-accent">${{ product.default_variant.price }}</div>
 
                                             <div class="star-rating">
-{#                                                {% for i in "12345" %}#}
-{#                                                    {% if forloop.counter <= product.get_avg_ratings %}#}
-{#                                                        <i class="star-rating-icon ci-star-filled active"></i>#}
-{#                                                        <!--#}
-{#                                                        Need to find a solution for half star#}
-{#                                                        <i class="star-rating-icon ci-star-half active"></i>#}
-{#                                                        -->#}
-{#                                                    {% else %}#}
-{#                                                        <i class="star-rating-icon ci-star"></i>#}
-{#                                                    {% endif %}#}
-{#                                                {% endfor %}#}
 
                                                 {% for star in product.get_stars %}
                                                     {% if star == 1 %}
