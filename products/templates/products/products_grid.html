@@ -861,7 +861,7 @@
                                 <h3 class="product-title fs-sm"><a href="{% url 'products:product' product.slug %}">{{ product.name }}</a></h3>
                                 <div class="d-flex justify-content-between">
                                     <div class="product-price">
-                                        <span class="text-accent">${{ product.get_default_price }}
+                                        <span class="text-accent">${{ product.default_variant.price }}
 {#                                            <small>50</small>#}
                                         </span>
 {#                                        <del class="fs-sm text-muted">38.<small>50</small></del>#}
@@ -881,34 +881,28 @@
                             </div>
                             <div class="card-body card-body-hidden">
                                 <div class="text-center pb-2">
-                                    <div class="form-check form-option form-check-inline mb-2">
-                                        <input checked="" class="form-check-input" id="white" name="color1" type="radio"/>
-                                        <label class="form-option-label rounded-circle" for="white"><span class="form-option-color rounded-circle" style="background-color: #eaeaeb;"></span></label>
-                                    </div>
-                                    <div class="form-check form-option form-check-inline mb-2">
-                                        <input class="form-check-input" id="blue" name="color1" type="radio"/>
-                                        <label class="form-option-label rounded-circle" for="blue"><span class="form-option-color rounded-circle" style="background-color: #d1dceb;"></span></label>
-                                    </div>
-                                    <div class="form-check form-option form-check-inline mb-2">
-                                        <input class="form-check-input" id="yellow" name="color1" type="radio"/>
-                                        <label class="form-option-label rounded-circle" for="yellow"><span class="form-option-color rounded-circle" style="background-color: #f4e6a2;"></span></label>
-                                    </div>
-                                    <div class="form-check form-option form-check-inline mb-2">
-                                        <input class="form-check-input" id="pink" name="color1" type="radio"/>
-                                        <label class="form-option-label rounded-circle" for="pink"><span class="form-option-color rounded-circle" style="background-color: #f3dcff;"></span></label>
-                                    </div>
+                                    {% for product_variant in product.all_variants %}
+                                        {% if product_variant.version == product.default_variant.version %}
+                                            <div class="form-check form-option form-check-inline mb-2">
+                                                <input class="form-check-input" id="color-{{ product_variant.color.id }}" name="color-{{ product.id }}" type="radio"/>
+                                                <label class="form-option-label rounded-circle" for="color-{{ product_variant.color.id }}"><span class="form-option-color rounded-circle" style="background-color: {{ product_variant.color.color_code }};"></span></label>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
+
                                 <div class="d-flex mb-2">
                                     <select class="form-select form-select-sm me-2">
-                                        <option>XS</option>
-                                        <option>S</option>
-                                        <option>M</option>
-                                        <option>L</option>
-                                        <option>XL</option>
+                                        <option>{{ product.default_variant.version.name }}</option>
+                                        {% for product_variant in product.all_variants %}
+                                            {% if product_variant.color == product.default_variant.color and product_variant.version != product.default_variant.version %}
+                                                <option>{{ product_variant.version.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
                                     </select>
-                                    <button class="btn btn-primary btn-sm" type="button"><i class="ci-cart fs-sm me-1"></i>Add to Cart</button>
+                                    <button class="btn btn-primary btn-sm" type="button"><i class="ci-bag fs-sm me-1"></i>Buy now</button>
                                 </div>
-{#                                <div class="text-center"><a class="nav-link-style fs-ms" data-bs-toggle="modal" href="#quick-view"><i class="ci-eye align-middle me-1"></i>Quick view</a></div>#}
+                                <div class="text-center "><a class="nav-link-style fs-ms add-to-cart" data-action="add" data-variant ="{{ product.default_variant.id }}" href="#"><i class="ci-cart align-middle me-1"></i>Add to cart</a></div>
                             </div>
                         </div>
                         <hr class="d-sm-none"/>

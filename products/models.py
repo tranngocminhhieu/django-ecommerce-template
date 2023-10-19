@@ -63,6 +63,9 @@ class Product(models.Model):
     def default_variant(self):
         return ProductVariant.objects.filter(product=self).order_by('price', '-quantity').first()
 
+    def all_variants(self):
+        return ProductVariant.objects.filter(product=self)
+
     def __str__(self):
         return self.name
 
