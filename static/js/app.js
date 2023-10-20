@@ -5,8 +5,12 @@ function updateURL(param, value) {
     window.location.href = url.toString();
 }
 
-function deleteParent(){
-
+// Get the parent div and remove it
+function removeParent(button, parentClass) {
+    var parent = button.closest(`.${parentClass}`);
+    if (parent) {
+        parent.remove();
+    }
 }
 
 
@@ -144,25 +148,7 @@ if (regForm) {
 //     };
 // });
 
-
-const editCart = async (action, product_variant_id) =>{
-
-    console.log(action, product_variant_id);
-
-    const response = await fetch('/orders/api/edit-cart/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken
-        },
-        body: JSON.stringify({
-            'action': action,
-            'product_variant_id': product_variant_id
-        })
-    });
-
-    const data = await response.json()
-
+const updateCart = async (data) => {
     console.log(data)
 
     const totalItemsSpans = document.getElementsByClassName('total-items');
@@ -171,7 +157,7 @@ const editCart = async (action, product_variant_id) =>{
         totalItemsSpans[i].textContent = data['total_items']
     };
     for (let i = 0; i < totalAmountSpans.length; i++) {
-        totalAmountSpans[i].textContent = data['total_amount']
+        totalAmountSpans[i].textContent = `\$${data['total_amount']}`
     }
 
 
@@ -195,7 +181,7 @@ const editCart = async (action, product_variant_id) =>{
                 <div class="ps-2">
                     <h6 class="widget-product-title"><a href="/products/${slug}/?version=${version}&amp;color=${color}">${product} (${version}, ${color})</a>
                     </h6>
-                    <div class="widget-product-meta"><span class="text-accent me-2">${price}</span><span class="text-muted">x ${quantity}</span>
+                    <div class="widget-product-meta"><span class="text-accent me-2">\$${price}</span><span class="text-muted">x ${quantity}</span>
                     </div>
                 </div>
             </div>
@@ -218,7 +204,32 @@ const editCart = async (action, product_variant_id) =>{
 
             await editCart(action, product_variant_id);
         });
-}
+    }
+
+
+
+
+};
+
+const editCart = async (action, product_variant_id) =>{
+
+    console.log(action, product_variant_id);
+
+    const response = await fetch('/orders/api/edit-cart/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({
+            'action': action,
+            'product_variant_id': product_variant_id
+        })
+    });
+
+    const data = await response.json()
+
+    await updateCart(data)
 
 }
 
@@ -250,3 +261,99 @@ for (let i = 0; i < deleteFromCartButtons.length; i++){
         await editCart(action, product_variant_id);
     });
 }
+
+// In Cart page
+const updateCartButton = document.getElementById('update-cart');
+if (updateCartButton) {
+    updateCartButton.addEventListener('click', async (event) => {
+        event.preventDefault()
+
+        let payload = []
+
+        const cartItems = document.getElementsByClassName('cart-item');
+        for (let i = 0; i < cartItems.length; i++) {
+            let variant = cartItems[i].getAttribute('data-variant');
+
+            let quantityInput = cartItems[i].getElementsByClassName('quantity');
+
+            let quantity = quantityInput[0].value;
+
+            let item = {"product_variant_id": parseInt(variant), "quantity": parseInt(quantity)};
+
+            payload.push(item)
+
+        };
+
+        console.log(payload)
+
+        const response = await fetch('/orders/api/update-cart/', {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        await updateCart(data)
+    })
+};
+
+const cartToCheckoutButton = document.getElementById('cart-to-checkout');
+if (cartToCheckoutButton) {
+    cartToCheckoutButton.addEventListener('click', async (event) => {
+        event.preventDefault()
+        const checkoutURL = cartToCheckoutButton.getAttribute('href');
+
+        let orderComment = document.getElementById('order-comment');
+
+        if (orderComment) {
+
+            const response = await fetch('/orders/api/update-draft-order/', {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+                body: JSON.stringify({"comment": orderComment.value})
+            });
+
+            console.log(response);
+
+            if (response.ok === true) {
+                window.location.href = checkoutURL;
+            };
+
+        } else {
+            window.location.href = checkoutURL;
+        };
+
+    });
+};
+
+// In Checkout details page
+const detailsToShippingButtons = document.getElementsByClassName('details-to-shipping');
+for (let i = 0; i < detailsToShippingButtons.length; i++) {
+    detailsToShippingButtons[i].addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        const href = detailsToShippingButtons[i].getAttribute('href');
+
+        const addressForm = document.getElementById('shipping-address');
+
+        const formData = new FormData(addressForm);
+
+        let payload = {}
+
+        formData.forEach((value, key) => payload[key] = value);
+
+        const response = await fetch('/orders/api/update-draft-order/', {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+
+        console.log(response);
+
+        if (response.ok === true) {
+            window.location.href = href;
+        };
+
+    });
+};

@@ -118,10 +118,16 @@ class ProductVariant(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.product.name} {self.version.name} {self.color.name}'
+        return f'{self.product.name} ({self.version.name}, {self.color.name})'
 
     class Meta:
         unique_together = ('product', 'color', 'version')
+
+    def name(self):
+        return f'{self.product.name} ({self.version.name}, {self.color.name})'
+
+    def url_params(self):
+        return f'?version={self.version.name}&color={self.color.name}'
 
 
 class Gallery(models.Model):

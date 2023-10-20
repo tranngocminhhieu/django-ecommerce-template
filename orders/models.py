@@ -24,6 +24,7 @@ class Order(models.Model):
     shipping_method = models.ForeignKey(to=ShippingMethod, on_delete=models.PROTECT, null=True, blank=True)
     payment_method = models.CharField(max_length=255, choices=[('COD', 'COD'), ('Card', 'Card'), ('Paypal', 'Paypal')], null=True, blank=True)
     status = models.IntegerField(choices=[(-1, 'Draft'), (0, 'Created'), (1, 'Completed')])
+    comment = models.TextField(max_length=2550, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

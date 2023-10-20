@@ -101,7 +101,7 @@
 
                     <div class="navbar-tool dropdown ms-3">
                         <a class="navbar-tool-icon-box bg-secondary dropdown-toggle"
-                           href="shop-cart.html">
+                           href="{% url 'orders:cart' %}">
                             <span class="navbar-tool-label total-items">
                                 {% if request.user.is_authenticated %}
                                     {% for order in  request.user.order_set.all %}
@@ -116,17 +116,17 @@
                             <i class="navbar-tool-icon ci-cart"></i>
                         </a>
 
-                        <a class="navbar-tool-text" href="shop-cart.html">
+                        <a class="navbar-tool-text" href="{% url 'orders:cart' %}">
                             <small>My Cart</small>
                             <span class="total-amount">
                                 {% if request.user.is_authenticated %}
                                     {% for order in  request.user.order_set.all %}
                                         {% if order.status == -1 %}
-                                            {{ order.total_amount }}
+                                            ${{ order.total_amount }}
                                         {% endif %}
                                     {% endfor %}
                                 {% else %}
-                                    0
+                                    $0
                                 {% endif %}
                             </span>
                         </a>
@@ -156,7 +156,7 @@
                                                                     ({{ order_item.product_variant.version.name }}, {{ order_item.product_variant.color.name }})</a>
                                                                 </h6>
                                                                 <div class="widget-product-meta"><span
-                                                                        class="text-accent me-2">{{ order_item.price }}</span><span
+                                                                        class="text-accent me-2">${{ order_item.price }}</span><span
                                                                         class="text-muted">x {{ order_item.quantity }}</span>
                                                                 </div>
                                                             </div>
@@ -176,21 +176,21 @@
               {% if request.user.is_authenticated %}
                   {% for order in  request.user.order_set.all %}
                       {% if order.status == -1 %}
-                          {{ order.total_amount }}
+                          ${{ order.total_amount }}
                       {% endif %}
                   {% endfor %}
               {% else %}
-                  0
+                  $0
               {% endif %}
           </span>
 
                                     </div>
                                     <a class="btn btn-outline-secondary btn-sm"
-                                       href="shop-cart.html">Expand cart<i
+                                       href="{% url 'orders:cart' %}">Expand cart<i
                                             class="ci-arrow-right ms-1 me-n1"></i></a>
                                 </div>
                                 <a class="btn btn-primary btn-sm d-block w-100"
-                                   href="checkout-details.html"><i
+                                   href="{% url 'orders:checkout_details' %}"><i
                                         class="ci-card me-2 fs-base align-middle"></i>Checkout</a>
                             </div>
                         </div>

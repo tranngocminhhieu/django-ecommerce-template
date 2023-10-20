@@ -33,3 +33,12 @@ def orders(request):
         }
         return render(request=request, template_name='account/orders.html', context=context)
 
+def profile(request):
+    if not request.user.is_authenticated:
+        return redirect(to='account:signin')
+    else:
+        user = User.objects.get(username=request.user.username)
+        context = {
+            'user': user
+        }
+        return render(request=request, template_name='account/profile.html', context=context)
