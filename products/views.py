@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from .models import Product, Gallery, Review, ProductVariant
 from django.db.models import Q
 from django.db.models import Avg, F, Case, When, Value, IntegerField, Max
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
+PER_PAGE = 1
 
 # Create your views here.
 def product(request, slug):
@@ -67,10 +70,20 @@ def product(request, slug):
 def products(request):
     products = Product.objects.all()
 
-    max_price = ProductVariant.objects.filter(product__in=products).aggregate(Max('price')).get('price__max')
+    page_number = request.GET.get('page', 1)
 
+    products_paginator = Paginator(products, per_page=PER_PAGE)
+
+    try:
+        products_paginator = products_paginator.page(number=page_number)
+    except PageNotAnInteger:
+        products_paginator = products_paginator.page(number=1)
+    except EmptyPage:
+        products_paginator = products_paginator.page(number=products_paginator.num_pages)
+
+    max_price = ProductVariant.objects.filter(product__in=products).aggregate(Max('price')).get('price__max')
     context = {
-        'products': products,
+        'products': products_paginator,
         'max_price': max_price
     }
     view = request.GET.get('view')
