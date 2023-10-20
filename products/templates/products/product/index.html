@@ -162,22 +162,25 @@
                                     </div>
 
 
-                                    <div class="d-flex align-items-center pt-2 pb-4">
-                                        <select class="form-select me-3" style="width: 5rem;">
+                                    <div class="d-flex align-items-center pt-2 pb-4" >
+                                        <select class="form-select me-3" style="width: 5rem;" id="quantity">
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
                                             <option value="4">4</option>
                                             <option value="5">5</option>
                                         </select>
-                                        <button class="btn btn-primary btn-shadow d-block w-100"
-                                                type="button"><i class="ci-bag fs-lg me-2"></i>Buy now
+
+                                        <button class="btn btn-primary btn-shadow d-block w-100 buy-now"
+                                                type="button" data-variant="{{ main_variant.id }}" data-quantity="1" id="buy-now">
+                                            <i class="ci-bag fs-lg me-2"></i>Buy now
                                         </button>
                                     </div>
                                     <div class="d-flex mb-4">
                                         <div class="w-100 me-3">
-                                            <button class="btn btn-secondary d-block w-100"
-                                                    type="button"><i
+                                            <button class="btn btn-secondary d-block w-100 edit-wishlist"
+                                                    type="button" data-action="add" data-variant="{{ main_variant.id }}">
+                                                <i
                                                     class="ci-heart fs-lg me-2"></i><span
                                                     class="d-none d-sm-inline">Add to </span>Wishlist
                                             </button>

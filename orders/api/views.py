@@ -16,7 +16,7 @@ def get_cart_info(order):
     data = {
         'total_items': order_items.aggregate(Sum('quantity')).get('quantity__sum') or 0,
         'total_amount': order.total_amount(),
-        'items': OderItemSerializer(order_items, many=True).data,
+        'items': order_items.values(),
     }
 
 
@@ -52,7 +52,7 @@ def edit_cart(request):
 
     if action == 'add':
         order_item.quantity = order_item.quantity + 1 if order_item.quantity else 1
-        order_item.price = order_item.product_variant.price
+        # order_item.price = order_item.product_variant.price
         order_item.save()
     elif action == 'delete':
         order_item.delete()
@@ -72,6 +72,9 @@ def update_cart(request):
     payload = request.data # [{"product_variant_id": 1, "quantity": 3}, {"product_variant_id": 2, "quantity": 5}]
 
     order, created = Order.objects.get_or_create(user=request.user, status=-1)
+
+    for item in payload:
+        item, created = OrderItem.objects.get_or_create(order=order, product_variant_id=item['product_variant_id'])
 
     order_items = OrderItem.objects.filter(order=order)
 
@@ -107,3 +110,22 @@ def update_draft_order(request):
 
 
     return Response(data=order_serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def edit_wishlist(request):
+    payload = request.data
+    action = payload['action']
+    product_variant_id = int(payload['product_variant_id'])
+
+    if action == 'add':
+        item, created = Wishlist.objects.get_or_create(user=request.user, product_variant_id=product_variant_id)
+    elif action == 'delete':
+        item, created = Wishlist.objects.get_or_create(user=request.user, product_variant_id=product_variant_id)
+        item.delete()
+
+    data = {
+        'total_items': Wishlist.objects.filter(user=request.user).count()
+    }
+
+    return Response(data=data, status=status.HTTP_201_CREATED)
+

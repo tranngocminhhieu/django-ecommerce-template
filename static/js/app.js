@@ -412,3 +412,99 @@ for (let i = 0; i < paymentToReviewButtons.length; i++) {
 
     });
 };
+
+// In Account > Wishlist
+const editWishlist = async (action, product_variant_id) =>{
+
+    console.log(action, product_variant_id);
+
+    const response = await fetch('/orders/api/edit-wishlist/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({
+            'action': action,
+            'product_variant_id': product_variant_id
+        })
+    });
+
+    const data = await response.json()
+
+    const wishlistCountSpans = document.getElementsByClassName('wishlist-count');
+    for (let i = 0; i < wishlistCountSpans.length; i++) {
+        wishlistCountSpans[i].textContent = data['total_items']
+    };
+
+};
+
+
+const deleteFromWishlistButtons = document.getElementsByClassName('delete-from-wishlist');
+for (let i = 0; i < deleteFromWishlistButtons.length; i++){
+
+    deleteFromWishlistButtons[i].addEventListener('click', async (event) => {
+        event.preventDefault()
+
+        let action = event.currentTarget.getAttribute('data-action');
+        let product_variant_id = event.currentTarget.getAttribute('data-variant');
+
+        await editWishlist(action, product_variant_id);
+
+        removeParent(deleteFromWishlistButtons[i], 'wishlist-item');
+
+    });
+};
+
+// In Products
+const editFromWishlistButtons = document.getElementsByClassName('edit-wishlist');
+for (let i = 0; i < editFromWishlistButtons.length; i++){
+
+    editFromWishlistButtons[i].addEventListener('click', async (event) => {
+        event.preventDefault()
+
+        let action = event.currentTarget.getAttribute('data-action');
+        let product_variant_id = event.currentTarget.getAttribute('data-variant');
+
+        await editWishlist(action, product_variant_id);
+
+        if (action === 'add') {
+            editFromWishlistButtons[i].setAttribute('data-action', 'delete');
+        } else {
+            editFromWishlistButtons[i].setAttribute('data-action', 'add');
+        };
+
+    });
+};
+
+// In all
+const buyNowButtons = document.getElementsByClassName('buy-now');
+for (let i = 0; i < buyNowButtons.length; i++) {
+    buyNowButtons[i].addEventListener('click', async (event) => {
+        let product_variant_id = buyNowButtons[i].getAttribute('data-variant');
+        let quantity = buyNowButtons[i].getAttribute('data-quantity');
+
+        let payload = [{"product_variant_id": parseInt(product_variant_id), "quantity": parseInt(quantity)}]
+
+        let response = await fetch('/orders/api/update-cart/', {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok === true) {
+            window.location.href = '/orders/checkout/';
+        };
+
+    });
+};
+
+// In single Product
+const quantitySelect = document.getElementById('quantity');
+const buyNowButton = document.getElementById('buy-now');
+if (quantitySelect && buyNowButton) {
+    quantitySelect.addEventListener('change', () => {
+        let quantity = quantitySelect.value;
+        buyNowButton.setAttribute('data-quantity', parseInt(quantity));
+    });
+};

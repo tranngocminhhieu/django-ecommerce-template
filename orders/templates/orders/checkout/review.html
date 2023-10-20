@@ -58,12 +58,12 @@
                                                                 alt="Product"></a>
                             <div class="pt-2">
                                 <h3 class="product-title fs-base mb-2"><a
-                                        href="{% url 'products:product' order_item.product_variant.product.slug %}{{ order_item.product_variant.url_params }}">{{ order_item.product_variant.name }}</a></h3>
+                                        href="{% url 'products:product' order_item.product_variant.product.slug %}{{ order_item.product_variant.url_params }}">{{ order_item.product_variant.product.name }}</a></h3>
                                 <div class="fs-sm"><span class="text-muted me-2">Version:</span>{{ order_item.product_variant.version.name }}</div>
                                 <div class="fs-sm"><span
                                         class="text-muted me-2">Color:</span>{{ order_item.product_variant.color.name }}
                                 </div>
-                                <div class="fs-lg text-accent pt-2">${{ order_item.price }}</div>
+                                <div class="fs-lg text-accent pt-2">${{ order_item.product_variant.price }}</div>
                             </div>
                         </div>
                         <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center text-sm-end"

@@ -47,7 +47,7 @@ class Order(models.Model):
         total_amount = 0
         order_items = self.orderitem_set.all() # OrderItem.objects.filter(order=self)
         for order_item in order_items:
-            total_amount += order_item.price * order_item.quantity
+            total_amount += order_item.quantity * (order_item.product_variant.price if self.status == -1 else (order_item.price or 0))
 
         if self.status == -1:
             discount = self.promo_code.discount if self.promo_code else 0
@@ -63,7 +63,7 @@ class Order(models.Model):
         subtotal_amount = 0
         order_items = self.orderitem_set.all()  # OrderItem.objects.filter(order=self)
         for order_item in order_items:
-            subtotal_amount += order_item.price * order_item.quantity
+            subtotal_amount += order_item.quantity * (order_item.product_variant.price if self.status == -1 else (order_item.price or 0))
 
         return subtotal_amount
 
@@ -75,7 +75,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(to=Order, on_delete=models.CASCADE)
     product_variant = models.ForeignKey(to=ProductVariant, on_delete=models.PROTECT)
     price = models.IntegerField(null=True)
-    quantity = models.IntegerField(null=True)
+    quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -83,12 +83,15 @@ class OrderItem(models.Model):
         return f'Order {self.order.pk} {self.product_variant.product.name} {self.product_variant.version} {self.product_variant.color}'
 
     def amount(self):
-        return self.price * self.quantity
+        return self.quantity * (self.product_variant.price if self.order.status == -1 else (self.price or 0))
 
 class Wishlist(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.PROTECT)
     product_variant = models.ForeignKey(to=ProductVariant, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product_variant')
 
     def __str__(self):
         return f'{self.user.username} {self.product_variant.product.name} {self.product_variant.version.name} {self.product_variant.color.name}'

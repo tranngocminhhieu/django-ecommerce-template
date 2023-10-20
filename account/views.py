@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from orders.models import Order, Wishlist
+from django.db.models import Q
 
 # Create your views here.
 def signin(request):
@@ -26,23 +28,52 @@ def signout(request):
 def orders(request):
     if not request.user.is_authenticated:
         return redirect(to='account:signin')
-    else:
-        user = User.objects.get(username=request.user.username)
-        context = {
-            'user': user
-        }
-        return render(request=request, template_name='account/orders.html', context=context)
+
+    orders = Order.objects.filter(~Q(status=-1) & Q(user=request.user))
+    wishlist = Wishlist.objects.filter(user=request.user)
+
+    context = {
+        'orders': orders,
+        'wishlist': wishlist,
+    }
+
+    return render(request=request, template_name='account/orders.html', context=context)
 
 def profile(request):
     if not request.user.is_authenticated:
         return redirect(to='account:signin')
-    else:
-        user = User.objects.get(username=request.user.username)
-        context = {
-            'user': user
-        }
-        return render(request=request, template_name='account/profile.html', context=context)
+
+    orders = Order.objects.filter(~Q(status=-1) & Q(user=request.user))
+    wishlist = Wishlist.objects.filter(user=request.user)
+
+    context = {
+        'orders': orders,
+        'wishlist': wishlist,
+    }
+    return render(request=request, template_name='account/profile.html', context=context)
 
 def wishlist(request):
-    context = {}
+    if not request.user.is_authenticated:
+        return redirect(to='account:signin')
+
+    orders = Order.objects.filter(~Q(status=-1) & Q(user=request.user))
+    wishlist = Wishlist.objects.filter(user=request.user)
+
+    context = {
+        'orders': orders,
+        'wishlist': wishlist,
+    }
     return render(request=request, template_name='account/wishlist.html', context=context)
+
+def address(request):
+    if not request.user.is_authenticated:
+        return redirect(to='account:signin')
+
+    orders = Order.objects.filter(~Q(status=-1) & Q(user=request.user))
+    wishlist = Wishlist.objects.filter(user=request.user)
+
+    context = {
+        'orders': orders,
+        'wishlist': wishlist,
+    }
+    return render(request=request, template_name='account/address.html', context=context)

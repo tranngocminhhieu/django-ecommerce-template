@@ -58,11 +58,13 @@
                                 <div class="fs-lg text-accent pt-2">${{ order_item.product_variant.price }}</div>
                             </div>
                         </div>
+
+
                         <div class="pt-2 pt-sm-0 ps-sm-3 mx-auto mx-sm-0 text-center text-sm-start"
                              style="max-width: 9rem;">
-                            <label class="form-label" for="quantity1">Quantity</label>
+                            <label class="form-label" for="quantity-{{ order_item.product_variant.id }}">Quantity</label>
                             <input class="form-control quantity" type="number" min="1"
-                                   value="{{ order_item.quantity }}">
+                                   value="{{ order_item.quantity }}" id="quantity-{{ order_item.product_variant.id }}">
                             <button class="btn btn-link px-0 text-danger" type="button"
                                     onclick="removeParent(this, 'd-sm-flex')"><i
                                     class="ci-close-circle me-2"></i><span

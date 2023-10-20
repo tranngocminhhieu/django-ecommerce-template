@@ -27,18 +27,17 @@
                     33 169 7720</a></div>
             </div>
             <div class="topbar-text dropdown d-md-none ms-auto"><a
-                    class="topbar-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Wishlist
-                / Compare / Track</a>
+                    class="topbar-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Wishlist</a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="{% url 'account:wishlist' %}"><i
-                            class="ci-heart text-muted me-2"></i>Wishlist ({{ user.wishlist_set.all.count }})</a></li>
+                            class="ci-heart text-muted me-2"></i>Wishlist (<span class="wishlist-count">{{ user.wishlist_set.all.count }}</span>)</a></li>
 
 
                 </ul>
             </div>
             <div class="d-none d-md-block ms-3 text-nowrap"><a
                     class="topbar-link d-none d-md-inline-block" href="{% url 'account:wishlist' %}"><i
-                    class="ci-heart mt-n1"></i>Wishlist ({{ user.wishlist_set.all.count }})</a>
+                    class="ci-heart mt-n1"></i>Wishlist (<span class="wishlist-count">{{ user.wishlist_set.all.count }}</span>)</a>
 
             </div>
         </div>

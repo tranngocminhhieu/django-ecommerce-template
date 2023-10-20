@@ -124,6 +124,10 @@ def checkout_complete(request, order_id):
         order.status = 0
         order.save()
 
+        for order_item in order.orderitem_set.all():
+            order_item.price = order_item.product_variant.price
+            order_item.save()
+
     order_items = OrderItem.objects.filter(order=order)
 
     context = {

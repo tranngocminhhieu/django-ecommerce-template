@@ -854,8 +854,9 @@
                     <div class="col-md-4 col-sm-6 px-2 mb-4">
                         <div class="card product-card">
 {#                            <span class="badge bg-danger badge-shadow">Sale</span>#}
-                            <button aria-label="Add to wishlist" class="btn-wishlist btn-sm" data-bs-original-title="Add to wishlist" data-bs-placement="right" data-bs-toggle="tooltip" type="button"><i
-                                    class="ci-heart"></i></button>
+                            <button aria-label="Add to wishlist" class="btn-wishlist btn-sm edit-wishlist" data-bs-original-title="Add to wishlist" data-bs-placement="right" data-bs-toggle="tooltip" type="button" data-action="add" data-variant="{{ product.default_variant.id }}">
+                                <i class="ci-heart"></i>
+                            </button>
                             <a class="card-img-top d-block overflow-hidden" href="{% url 'products:product' product.slug %}"><img alt="Product" src="{{ product.image.url }}"/></a>
                             <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">{{ product.categories.first.name }}</a>
                                 <h3 class="product-title fs-sm"><a href="{% url 'products:product' product.slug %}">{{ product.name }}</a></h3>
