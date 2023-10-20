@@ -42,3 +42,7 @@ def profile(request):
             'user': user
         }
         return render(request=request, template_name='account/profile.html', context=context)
+
+def wishlist(request):
+    context = {}
+    return render(request=request, template_name='account/wishlist.html', context=context)

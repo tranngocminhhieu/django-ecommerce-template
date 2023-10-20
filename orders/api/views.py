@@ -57,6 +57,11 @@ def edit_cart(request):
     elif action == 'delete':
         order_item.delete()
 
+    if order.orderitem_set.all().count() == 0:
+        order.shipping_method = None
+        order.promo_code = None
+        order.save()
+
     data = get_cart_info(order)
 
 
@@ -77,6 +82,11 @@ def update_cart(request):
         else:
             order_item.delete()
 
+    if order.orderitem_set.all().count() == 0:
+        order.shipping_method = None
+        order.promo_code = None
+        order.save()
+
     data = get_cart_info(order)
 
     return Response(data=data, status=status.HTTP_201_CREATED)
@@ -94,5 +104,6 @@ def update_draft_order(request):
     order_serializer = OrderSerializer(data=data)
     if order_serializer.is_valid():
         order_serializer.update(instance=order, validated_data=order_serializer.validated_data)
+
 
     return Response(data=order_serializer.data, status=status.HTTP_201_CREATED)

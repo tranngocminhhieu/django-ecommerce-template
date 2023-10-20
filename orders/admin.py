@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, OrderItem, ShippingMethod, Wishlist
+from .models import Order, OrderItem, ShippingMethod, Wishlist, PromoCode
 
 # Register your models here.
 def register_admin_site(model, fileds=None, enable_filter=False, enable_search=False, hide_fileds=[]):
@@ -15,3 +15,4 @@ register_admin_site(Order)
 register_admin_site(OrderItem)
 register_admin_site(ShippingMethod)
 register_admin_site(Wishlist)
+register_admin_site(PromoCode)

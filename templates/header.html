@@ -30,21 +30,16 @@
                     class="topbar-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Wishlist
                 / Compare / Track</a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="account-wishlist.html"><i
-                            class="ci-heart text-muted me-2"></i>Wishlist (3)</a></li>
-                    <li><a class="dropdown-item" href="comparison.html"><i
-                            class="ci-compare text-muted me-2"></i>Compare (3)</a></li>
-                    <li><a class="dropdown-item" href="order-tracking.html"><i
-                            class="ci-location text-muted me-2"></i>Order tracking</a></li>
+                    <li><a class="dropdown-item" href="{% url 'account:wishlist' %}"><i
+                            class="ci-heart text-muted me-2"></i>Wishlist ({{ user.wishlist_set.all.count }})</a></li>
+
+
                 </ul>
             </div>
             <div class="d-none d-md-block ms-3 text-nowrap"><a
-                    class="topbar-link d-none d-md-inline-block" href="account-wishlist.html"><i
-                    class="ci-heart mt-n1"></i>Wishlist (3)</a><a
-                    class="topbar-link ms-3 ps-3 border-start border-light d-none d-md-inline-block"
-                    href="comparison.html"><i class="ci-compare mt-n1"></i>Compare (3)</a><a
-                    class="topbar-link ms-3 border-start border-light ps-3 d-none d-md-inline-block"
-                    href="order-tracking.html"><i class="ci-location mt-n1"></i>Order tracking</a>
+                    class="topbar-link d-none d-md-inline-block" href="{% url 'account:wishlist' %}"><i
+                    class="ci-heart mt-n1"></i>Wishlist ({{ user.wishlist_set.all.count }})</a>
+
             </div>
         </div>
     </div>
@@ -103,8 +98,8 @@
                         <a class="navbar-tool-icon-box bg-secondary dropdown-toggle"
                            href="{% url 'orders:cart' %}">
                             <span class="navbar-tool-label total-items">
-                                {% if request.user.is_authenticated %}
-                                    {% for order in  request.user.order_set.all %}
+                                {% if user.is_authenticated %}
+                                    {% for order in  user.order_set.all %}
                                         {% if order.status == -1 %}
                                             {{ order.total_items }}
                                         {% endif %}

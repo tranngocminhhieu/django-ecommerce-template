@@ -327,7 +327,7 @@ if (cartToCheckoutButton) {
     });
 };
 
-// In Checkout details page
+// In Checkout page
 const detailsToShippingButtons = document.getElementsByClassName('details-to-shipping');
 for (let i = 0; i < detailsToShippingButtons.length; i++) {
     detailsToShippingButtons[i].addEventListener('click', async (event) => {
@@ -347,6 +347,61 @@ for (let i = 0; i < detailsToShippingButtons.length; i++) {
             method: 'POST',
             headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
             body: JSON.stringify(payload)
+        });
+
+        console.log(response);
+
+        if (response.ok === true) {
+            window.location.href = href;
+        };
+
+    });
+};
+
+
+// In Checkout > Shipping page
+const shippingToPaymentButtons = document.getElementsByClassName('shipping-to-payment');
+for (let i = 0; i < shippingToPaymentButtons.length; i++) {
+    shippingToPaymentButtons[i].addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        const href = shippingToPaymentButtons[i].getAttribute('href');
+
+        const shippingForm = document.getElementById('shipping-method');
+
+        const formData = new FormData(shippingForm);
+
+        let payload = {}
+
+        formData.forEach((value, key) => payload[key] = value);
+
+        const response = await fetch('/orders/api/update-draft-order/', {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+
+        console.log(response);
+
+        if (response.ok === true) {
+            window.location.href = href;
+        };
+
+    });
+};
+
+// In Checkout > Payment
+const paymentToReviewButtons = document.getElementsByClassName('payment-to-review');
+for (let i = 0; i < paymentToReviewButtons.length; i++) {
+    paymentToReviewButtons[i].addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        const href = paymentToReviewButtons[i].getAttribute('href');
+
+        const response = await fetch('/orders/api/update-draft-order/', {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+            body: JSON.stringify({"payment_method": "COD"})
         });
 
         console.log(response);

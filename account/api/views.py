@@ -39,3 +39,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+@api_view(['GET'])
+def api_test(request):
+    return Response(data={'id': request.user.id, 'username': request.user.username})
