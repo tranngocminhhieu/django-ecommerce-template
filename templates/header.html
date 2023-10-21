@@ -30,14 +30,14 @@
                     class="topbar-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Wishlist</a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="{% url 'account:wishlist' %}"><i
-                            class="ci-heart text-muted me-2"></i>Wishlist (<span class="wishlist-count">{{ user.wishlist_set.all.count }}</span>)</a></li>
+                            class="ci-heart text-muted me-2"></i>Wishlist (<span class="wishlist-count">{% if user.is_authenticated %}{{ user.wishlist_set.all.count }}{% else %}0{% endif %}</span>)</a></li>
 
 
                 </ul>
             </div>
             <div class="d-none d-md-block ms-3 text-nowrap"><a
                     class="topbar-link d-none d-md-inline-block" href="{% url 'account:wishlist' %}"><i
-                    class="ci-heart mt-n1"></i>Wishlist (<span class="wishlist-count">{{ user.wishlist_set.all.count }}</span>)</a>
+                    class="ci-heart mt-n1"></i>Wishlist (<span class="wishlist-count">{% if user.is_authenticated %}{{ user.wishlist_set.all.count }}{% else %}0{% endif %}</span>)</a>
 
             </div>
         </div>
@@ -58,16 +58,9 @@
                            placeholder="Search for products" type="text"/>
                     <select class="form-select flex-shrink-0" style="width: 10.5rem;">
                         <option>All categories</option>
-                        <option>Computers</option>
-                        <option>Smartphones</option>
-                        <option>TV, Video, Audio</option>
-                        <option>Cameras</option>
-                        <option>Headphones</option>
-                        <option>Wearables</option>
-                        <option>Printers</option>
-                        <option>Video Games</option>
-                        <option>Home Music</option>
-                        <option>Data Storage</option>
+                        {% for category in product_categories %}
+                            <option>{{ category.name }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <!-- Toolbar-->

@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Product, Gallery, Review, ProductVariant
+from .models import Product, Gallery, Review, ProductVariant, Brand
 from django.db.models import Q
 from django.db.models import Avg, F, Case, When, Value, IntegerField, Max
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from orders.models import ShippingMethod
 
-PER_PAGE = 1
+PER_PAGE = 9
+
+
 
 # Create your views here.
 def product(request, slug):
@@ -63,14 +66,27 @@ def product(request, slug):
         'reviews': reviews,
         'product_variants': product_variants,
         'review_stars_detail': review_stars_detail,
-        'recommended_percent': recommended_percent
+        'recommended_percent': recommended_percent,
+        'shipping_methods': ShippingMethod.objects.all()
     }
     return render(request=request, template_name='products/product/index.html', context=context)
 
 def products(request):
-    products = Product.objects.all()
-
+    # Get all params
     page_number = request.GET.get('page', 1)
+    min_price = request.GET.get('min_price', 0)
+    max_price = request.GET.get('max_price', 999999999)
+    brands = request.GET.getlist('brand')
+    category = request.GET.get('category')
+
+    filters = Q(productvariant__price__range=[min_price, max_price])
+
+    if brands:
+        filters &= Q(brand__name__in=brands)
+    if category:
+        filters &= Q(categories__name=category)
+
+    products = Product.objects.filter(filters).distinct()
 
     products_paginator = Paginator(products, per_page=PER_PAGE)
 
@@ -81,10 +97,15 @@ def products(request):
     except EmptyPage:
         products_paginator = products_paginator.page(number=products_paginator.num_pages)
 
-    max_price = ProductVariant.objects.filter(product__in=products).aggregate(Max('price')).get('price__max')
+    filter_max_price = ProductVariant.objects.aggregate(Max('price')).get('price__max')
+
     context = {
         'products': products_paginator,
-        'max_price': max_price
+        'filter_max_price': filter_max_price,
+        'min_price': min_price,
+        'max_price': max_price,
+        'brands': brands,
+        'category': category
     }
     view = request.GET.get('view')
     if view == 'list':

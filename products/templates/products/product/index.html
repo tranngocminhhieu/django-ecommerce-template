@@ -162,8 +162,9 @@
                                     </div>
 
 
-                                    <div class="d-flex align-items-center pt-2 pb-4" >
-                                        <select class="form-select me-3" style="width: 5rem;" id="quantity">
+                                    <div class="d-flex align-items-center pt-2 pb-4">
+                                        <select class="form-select me-3" style="width: 5rem;"
+                                                id="quantity">
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
@@ -172,21 +173,26 @@
                                         </select>
 
                                         <button class="btn btn-primary btn-shadow d-block w-100 buy-now"
-                                                type="button" data-variant="{{ main_variant.id }}" data-quantity="1" id="buy-now">
+                                                type="button" data-variant="{{ main_variant.id }}"
+                                                data-quantity="1" id="buy-now">
                                             <i class="ci-bag fs-lg me-2"></i>Buy now
                                         </button>
                                     </div>
                                     <div class="d-flex mb-4">
                                         <div class="w-100 me-3">
                                             <button class="btn btn-secondary d-block w-100 edit-wishlist"
-                                                    type="button" data-action="add" data-variant="{{ main_variant.id }}">
+                                                    type="button" data-action="add"
+                                                    data-variant="{{ main_variant.id }}">
                                                 <i
-                                                    class="ci-heart fs-lg me-2"></i><span
+                                                        class="ci-heart fs-lg me-2"></i><span
                                                     class="d-none d-sm-inline">Add to </span>Wishlist
                                             </button>
                                         </div>
                                         <div class="w-100">
-                                            <button class="btn btn-secondary d-block w-100 add-to-cart" data-action="add" data-variant="{{ main_variant.id }}" type="button">
+                                            <button class="btn btn-secondary d-block w-100 add-to-cart"
+                                                    data-action="add"
+                                                    data-variant="{{ main_variant.id }}"
+                                                    type="button">
                                                 <i class="ci-cart fs-lg me-2"></i>Add to cart
                                             </button>
 
@@ -194,6 +200,7 @@
                                     </div>
                                     <!-- Product panels-->
                                     <div class="accordion mb-4" id="productPanels">
+
                                         <div class="accordion-item">
                                             <h3 class="accordion-header"><a class="accordion-button"
                                                                             href="#shippingOptions"
@@ -207,65 +214,51 @@
                                                  id="shippingOptions"
                                                  data-bs-parent="#productPanels">
                                                 <div class="accordion-body fs-sm">
-                                                    <div class="d-flex justify-content-between border-bottom pb-2">
+                                                    {% for shipping_method in shipping_methods %}
+                                                    <div class="d-flex justify-content-between {% if not forloop.last %}border-bottom {% endif %}py-2">
                                                         <div>
-                                                            <div class="fw-semibold text-dark">Local
-                                                                courier shipping
+                                                            <div class="fw-semibold text-dark">
+                                                                {{ shipping_method.name }}
                                                             </div>
-                                                            <div class="fs-sm text-muted">2 - 4
-                                                                days
+                                                            <div class="fs-sm text-muted">
+                                                                {{ shipping_method.delivery_time }}
                                                             </div>
                                                         </div>
-                                                        <div>$16.50</div>
+                                                        <div>${{ shipping_method.fee }}</div>
                                                     </div>
-                                                    <div class="d-flex justify-content-between border-bottom py-2">
-                                                        <div>
-                                                            <div class="fw-semibold text-dark">UPS
-                                                                ground shipping
-                                                            </div>
-                                                            <div class="fs-sm text-muted">4 - 6
-                                                                days
-                                                            </div>
-                                                        </div>
-                                                        <div>$19.00</div>
-                                                    </div>
-                                                    <div class="d-flex justify-content-between pt-2">
-                                                        <div>
-                                                            <div class="fw-semibold text-dark">Local
-                                                                pickup from store
-                                                            </div>
-                                                            <div class="fs-sm text-muted">—</div>
-                                                        </div>
-                                                        <div>$0.00</div>
-                                                    </div>
+                                                    {% endfor %}
+
+
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="accordion-item">
-                                            <h3 class="accordion-header"><a
-                                                    class="accordion-button collapsed"
-                                                    href="#localStore" role="button"
-                                                    data-bs-toggle="collapse" aria-expanded="true"
-                                                    aria-controls="localStore"><i
-                                                    class="ci-location text-muted fs-lg align-middle mt-n1 me-2"></i>Find
-                                                in local store</a></h3>
-                                            <div class="accordion-collapse collapse" id="localStore"
-                                                 data-bs-parent="#productPanels">
-                                                <div class="accordion-body">
-                                                    <select class="form-select">
-                                                        <option value="">Select your country
-                                                        </option>
-                                                        <option value="Argentina">Argentina</option>
-                                                        <option value="Belgium">Belgium</option>
-                                                        <option value="France">France</option>
-                                                        <option value="Germany">Germany</option>
-                                                        <option value="Spain">Spain</option>
-                                                        <option value="UK">United Kingdom</option>
-                                                        <option value="USA">USA</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+
+{#                                        <div class="accordion-item">#}
+{#                                            <h3 class="accordion-header"><a#}
+{#                                                    class="accordion-button collapsed"#}
+{#                                                    href="#localStore" role="button"#}
+{#                                                    data-bs-toggle="collapse" aria-expanded="true"#}
+{#                                                    aria-controls="localStore"><i#}
+{#                                                    class="ci-location text-muted fs-lg align-middle mt-n1 me-2"></i>Find#}
+{#                                                in local store</a></h3>#}
+{#                                            <div class="accordion-collapse collapse" id="localStore"#}
+{#                                                 data-bs-parent="#productPanels">#}
+{#                                                <div class="accordion-body">#}
+{#                                                    <select class="form-select">#}
+{#                                                        <option value="">Select your country#}
+{#                                                        </option>#}
+{#                                                        <option value="Argentina">Argentina</option>#}
+{#                                                        <option value="Belgium">Belgium</option>#}
+{#                                                        <option value="France">France</option>#}
+{#                                                        <option value="Germany">Germany</option>#}
+{#                                                        <option value="Spain">Spain</option>#}
+{#                                                        <option value="UK">United Kingdom</option>#}
+{#                                                        <option value="USA">USA</option>#}
+{#                                                    </select>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </div>#}
+
                                     </div>
                                     <!-- Sharing-->
                                     <label class="form-label d-inline-block align-middle my-2 me-3">Share:</label><a

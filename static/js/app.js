@@ -477,6 +477,35 @@ for (let i = 0; i < editFromWishlistButtons.length; i++){
     });
 };
 
+const priceSliders = document.getElementsByClassName('range-slider');
+for (let i = 0; i < priceSliders.length; i++) {
+    let rangeSliderUi = priceSliders[i].querySelector('.range-slider-ui');
+    let rangeSlierValueMin = priceSliders[i].querySelector('.range-slider-value-min');
+    let rangeSlierValueMax = priceSliders[i].querySelector('.range-slider-value-max');
+
+    rangeSliderUi.noUiSlider.on('change', () => {
+        let valueMin = rangeSlierValueMin.value;
+        let valueMax = rangeSlierValueMax.value;
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('min_price', valueMin);
+        url.searchParams.set('max_price', valueMax);
+
+        window.location.href = url.toString();
+    });
+
+    rangeSlierValueMax.addEventListener('change', () => {
+        let valueMax = rangeSlierValueMax.value;
+        updateURL('max_price', valueMax);
+    });
+
+    rangeSlierValueMin.addEventListener('change', () => {
+        let valueMin = rangeSlierValueMin.value;
+        updateURL('min_price', valueMin);
+    });
+
+};
+
 // In all
 const buyNowButtons = document.getElementsByClassName('buy-now');
 for (let i = 0; i < buyNowButtons.length; i++) {
@@ -507,4 +536,42 @@ if (quantitySelect && buyNowButton) {
         let quantity = quantitySelect.value;
         buyNowButton.setAttribute('data-quantity', parseInt(quantity));
     });
+};
+
+//
+const brandCheckBoxes = document.getElementsByClassName('brand-checkbox');
+for (let i = 0; i < brandCheckBoxes.length; i++) {
+    brandCheckBoxes[i].addEventListener('change', () => {
+
+        const url = new URL(window.location.href);
+        const brandValue = brandCheckBoxes[i].value;
+
+        if (brandCheckBoxes[i].checked) {
+            url.searchParams.append('brand', brandValue);
+            window.location.href = url.toString();
+
+        } else {
+            const brandParams = url.searchParams.getAll('brand');
+            const updatedBrandParams = brandParams.filter(brand => brand !== brandValue);
+            url.searchParams.delete('brand');
+            updatedBrandParams.forEach(brand => url.searchParams.append('brand', brand));
+            window.location.href = url.toString();
+        }
+    })
+}
+
+
+// Keep scroll position when refresh in the same page
+// Reference https://stackoverflow.com/a/58743412/19919470
+document.addEventListener("DOMContentLoaded", () => {
+    const scrollPosition = localStorage.getItem('scrollPosition');
+    const scrollPathName = localStorage.getItem('scrollPathName');
+    if (scrollPosition && scrollPathName && scrollPathName === window.location.pathname) {
+        window.scrollTo(0, scrollPosition);
+    }
+});
+
+window.onbeforeunload = () => {
+    localStorage.setItem('scrollPosition', window.scrollY);
+    localStorage.setItem('scrollPathName', window.location.pathname);
 };

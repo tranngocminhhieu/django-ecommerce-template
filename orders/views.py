@@ -1,9 +1,9 @@
-import json
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import Order, OrderItem, ShippingMethod, PromoCode
 # Create your views here.
 
+@login_required
 def cart(request):
 
     order, created = Order.objects.get_or_create(user=request.user, status=-1)
@@ -29,6 +29,7 @@ def cart(request):
 
     return render(request=request, template_name='orders/cart.html', context=context)
 
+@login_required
 def checkout_details(request):
 
     order, created = Order.objects.get_or_create(user=request.user, status=-1)
@@ -52,6 +53,7 @@ def checkout_details(request):
 
     return render(request=request, template_name='orders/checkout/details.html', context=context)
 
+@login_required
 def checkout_shipping(request):
     shipping_methods = ShippingMethod.objects.all()
     order, created = Order.objects.get_or_create(user=request.user, status=-1)
@@ -75,6 +77,7 @@ def checkout_shipping(request):
     }
     return render(request=request, template_name='orders/checkout/shipping.html', context=context)
 
+@login_required
 def checkout_payment(request):
     order, created = Order.objects.get_or_create(user=request.user, status=-1)
     order_items = OrderItem.objects.filter(order=order)
@@ -96,6 +99,7 @@ def checkout_payment(request):
     }
     return render(request=request, template_name='orders/checkout/payment.html', context=context)
 
+@login_required
 def checkout_review(request):
     order, created = Order.objects.get_or_create(user=request.user, status=-1)
     order_items = OrderItem.objects.filter(order=order)
@@ -117,6 +121,7 @@ def checkout_review(request):
     }
     return render(request=request, template_name='orders/checkout/review.html', context=context)
 
+@login_required
 def checkout_complete(request, order_id):
     order = Order.objects.get(pk=order_id)
 
@@ -136,6 +141,7 @@ def checkout_complete(request, order_id):
     }
 
     return render(request=request, template_name='orders/checkout/complete.html', context=context)
+
 
 def order_tracking(request, order_id):
     order = Order.objects.get(pk=order_id)

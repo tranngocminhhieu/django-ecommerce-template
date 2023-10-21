@@ -9,6 +9,7 @@ class Category(models.Model):
     description = models.TextField(max_length=2550, blank=True, null=True)
     image = models.ImageField(upload_to='products/categories', blank=True, null=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child', on_delete=models.CASCADE)
+    icon_class = models.CharField(max_length=255, default='ci-folder', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
