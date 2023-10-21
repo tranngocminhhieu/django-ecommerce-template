@@ -3,195 +3,123 @@
     <!-- Heading-->
     <div class="d-flex flex-wrap justify-content-between align-items-center pt-1 border-bottom pb-4 mb-4">
         <h2 class="h3 mb-0 pt-3 me-2">Trending products</h2>
-        <div class="pt-3"><a class="btn btn-outline-accent btn-sm" href="shop-grid-ls.html">More products<i class="ci-arrow-right ms-1 me-n1"></i></a></div>
+        <div class="pt-3"><a class="btn btn-outline-accent btn-sm" href="{% url 'products:products' %}">More products<i class="ci-arrow-right ms-1 me-n1"></i></a></div>
     </div>
     <!-- Grid-->
     <div class="row pt-2 mx-n2">
         <!-- Product-->
-        <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-4">
-            <div class="card product-card">
-                <div class="product-card-actions d-flex align-items-center"><a class="btn-action nav-link-style me-2" href="#"><i class="ci-compare me-1"></i>Compare</a>
-                    <button aria-label="Add to wishlist" class="btn-wishlist btn-sm" data-bs-original-title="Add to wishlist" data-bs-placement="left" data-bs-toggle="tooltip" type="button"><i
-                            class="ci-heart"></i></button>
-                </div>
-                <a class="card-img-top d-block overflow-hidden" href="shop-single-v2.html"><img alt="Product" src="{% static 'img/shop/catalog/58.jpg' %}"/></a>
-                <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">Headphones</a>
-                    <h3 class="product-title fs-sm"><a href="shop-single-v2.html">Wireless Bluetooth Headphones</a></h3>
-                    <div class="d-flex justify-content-between">
-                        <div class="product-price"><span class="text-accent">$198.<small>00</small></span></div>
-                        <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i
-                                class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i>
+        {% for product in products %}
+{#            <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-4">#}
+{#            <div class="card product-card">#}
+{#                <div class="product-card-actions d-flex align-items-center"><a class="btn-action nav-link-style me-2" href="#"><i class="ci-compare me-1"></i>Compare</a>#}
+{#                    <button aria-label="Add to wishlist" class="btn-wishlist btn-sm" data-bs-original-title="Add to wishlist" data-bs-placement="left" data-bs-toggle="tooltip" type="button"><i#}
+{#                            class="ci-heart"></i></button>#}
+{#                </div>#}
+{#                <a class="card-img-top d-block overflow-hidden" href="shop-single-v2.html"><img alt="Product" src="{% static 'img/shop/catalog/58.jpg' %}"/></a>#}
+{#                <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">Headphones</a>#}
+{#                    <h3 class="product-title fs-sm"><a href="shop-single-v2.html">Wireless Bluetooth Headphones</a></h3>#}
+{#                    <div class="d-flex justify-content-between">#}
+{#                        <div class="product-price"><span class="text-accent">$198.<small>00</small></span></div>#}
+{#                        <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i#}
+{#                                class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="card-body card-body-hidden">#}
+{#                    <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button"><i class="ci-cart fs-sm me-1"></i>Add to Cart</button>#}
+{#                    <div class="text-center"><a class="nav-link-style fs-ms" data-bs-toggle="modal" href="#quick-view-electro"><i class="ci-eye align-middle me-1"></i>Quick view</a></div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <hr class="d-sm-none"/>#}
+{#        </div>#}
+
+            {% if forloop.counter <= 8 %}
+                <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-4">
+                            <div class="card product-card">
+                                {#                            <span class="badge bg-danger badge-shadow">Sale</span>#}
+                                <button aria-label="Add to wishlist"
+                                        class="btn-wishlist btn-sm edit-wishlist"
+                                        data-bs-original-title="Add to wishlist"
+                                        data-bs-placement="right" data-bs-toggle="tooltip"
+                                        type="button" data-action="add"
+                                        data-variant="{{ product.default_variant.id }}">
+                                    <i class="ci-heart"></i>
+                                </button>
+                                <a class="card-img-top d-block overflow-hidden"
+                                   href="{% url 'products:product' product.slug %}"><img
+                                        alt="Product" src="{{ product.image.url }}"/></a>
+                                <div class="card-body py-2"><a
+                                        class="product-meta d-block fs-xs pb-1"
+                                        href="#">{{ product.categories.first.name }}</a>
+                                    <h3 class="product-title fs-sm"><a
+                                            href="{% url 'products:product' product.slug %}">{{ product.name }}</a>
+                                    </h3>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="product-price">
+                                        <span class="text-accent">${{ product.default_variant.price }}
+{#                                            <small>50</small>#}
+                                        </span>
+                                            {#                                        <del class="fs-sm text-muted">38.<small>50</small></del>#}
+                                        </div>
+                                        <div class="star-rating">
+                                            {% for star in product.get_stars %}
+                                                {% if star == 1 %}
+                                                    <i class="star-rating-icon ci-star-filled active"></i>
+                                                {% elif star == 0.5 %}
+                                                    <i class="star-rating-icon ci-star-half active"></i>
+                                                {% else %}
+                                                    <i class="star-rating-icon ci-star"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body card-body-hidden">
+                                    <div class="text-center pb-2">
+                                        {% for product_variant in product.all_variants %}
+                                            {% if product_variant.version == product.default_variant.version %}
+                                                <div class="form-check form-option form-check-inline mb-2">
+                                                    <input class="form-check-input"
+                                                           id="color-{{ product_variant.color.id }}"
+                                                           name="color-{{ product.id }}"
+                                                           type="radio"/>
+                                                    <label class="form-option-label rounded-circle"
+                                                           for="color-{{ product_variant.color.id }}"><span
+                                                            class="form-option-color rounded-circle"
+                                                            style="background-color: {{ product_variant.color.color_code }};"></span></label>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="d-flex mb-2">
+                                        <select class="form-select form-select-sm me-2">
+                                            <option>{{ product.default_variant.version.name }}</option>
+                                            {% for product_variant in product.all_variants %}
+                                                {% if product_variant.color == product.default_variant.color and product_variant.version != product.default_variant.version %}
+                                                    <option>{{ product_variant.version.name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <button class="btn btn-primary btn-sm buy-now" type="button"
+                                                data-variant="{{ product.default_variant.id }}"
+                                                data-quantity="1"><i
+                                                class="ci-bag fs-sm me-1"></i>Buy now
+                                        </button>
+                                    </div>
+                                    <div class="text-center "><a
+                                            class="nav-link-style fs-ms add-to-cart"
+                                            data-action="add"
+                                            data-variant="{{ product.default_variant.id }}"
+                                            href="#"><i
+                                            class="ci-cart align-middle me-1"></i>Add to cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="d-sm-none"/>
                         </div>
-                    </div>
-                </div>
-                <div class="card-body card-body-hidden">
-                    <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button"><i class="ci-cart fs-sm me-1"></i>Add to Cart</button>
-                    <div class="text-center"><a class="nav-link-style fs-ms" data-bs-toggle="modal" href="#quick-view-electro"><i class="ci-eye align-middle me-1"></i>Quick view</a></div>
-                </div>
-            </div>
-            <hr class="d-sm-none"/>
-        </div>
-        <!-- Product-->
-        <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-4">
-            <div class="card product-card"><span class="badge bg-danger badge-shadow">Sale</span>
-                <div class="product-card-actions d-flex align-items-center"><a class="btn-action nav-link-style me-2" href="#"><i class="ci-compare me-1"></i>Compare</a>
-                    <button aria-label="Add to wishlist" class="btn-wishlist btn-sm" data-bs-original-title="Add to wishlist" data-bs-placement="left" data-bs-toggle="tooltip" type="button"><i
-                            class="ci-heart"></i></button>
-                </div>
-                <a class="card-img-top d-block overflow-hidden" href="shop-single-v2.html"><img alt="Product" src="{% static 'img/shop/catalog/59.jpg' %}"/></a>
-                <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">Computers</a>
-                    <h3 class="product-title fs-sm"><a href="shop-single-v2.html">AirPort Extreme Base Station</a></h3>
-                    <div class="d-flex justify-content-between">
-                        <div class="product-price"><span class="text-accent">$98.<small>50</small></span>
-                            <del class="fs-sm text-muted">$149.<small>99</small></del>
-                        </div>
-                        <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i
-                                class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body card-body-hidden">
-                    <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button"><i class="ci-cart fs-sm me-1"></i>Add to Cart</button>
-                    <div class="text-center"><a class="nav-link-style fs-ms" data-bs-toggle="modal" href="#quick-view-electro"><i class="ci-eye align-middle me-1"></i>Quick view</a></div>
-                </div>
-            </div>
-            <hr class="d-sm-none"/>
-        </div>
-        <!-- Product-->
-        <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-4">
-            <div class="card product-card">
-                <div class="product-card-actions d-flex align-items-center"><a class="btn-action nav-link-style me-2" href="#"><i class="ci-compare me-1"></i>Compare</a>
-                    <button aria-label="Add to wishlist" class="btn-wishlist btn-sm" data-bs-original-title="Add to wishlist" data-bs-placement="left" data-bs-toggle="tooltip" type="button"><i
-                            class="ci-heart"></i></button>
-                </div>
-                <a class="card-img-top d-block overflow-hidden" href="shop-single-v2.html"><img alt="Product" src="{% static 'img/shop/catalog/60.jpg' %}"/></a>
-                <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">TV, Video &amp; Audio</a>
-                    <h3 class="product-title fs-sm"><a href="shop-single-v2.html">Smart TV LED 49’’ Ultra HD</a></h3>
-                    <div class="d-flex justify-content-between">
-                        <div class="product-price"><span class="text-muted fs-sm">Out of stock</span></div>
-                    </div>
-                </div>
-                <div class="card-body card-body-hidden"><a class="btn btn-secondary btn-sm d-block w-100 mb-2" href="shop-single-v2.html">View details</a>
-                    <div class="text-center"><a class="nav-link-style fs-ms" data-bs-toggle="modal" href="#quick-view-electro"><i class="ci-eye align-middle me-1"></i>Quick view</a></div>
-                </div>
-            </div>
-            <hr class="d-sm-none"/>
-        </div>
-        <!-- Product-->
-        <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-4">
-            <div class="card product-card">
-                <div class="product-card-actions d-flex align-items-center"><a class="btn-action nav-link-style me-2" href="#"><i class="ci-compare me-1"></i>Compare</a>
-                    <button aria-label="Add to wishlist" class="btn-wishlist btn-sm" data-bs-original-title="Add to wishlist" data-bs-placement="left" data-bs-toggle="tooltip" type="button"><i
-                            class="ci-heart"></i></button>
-                </div>
-                <a class="card-img-top d-block overflow-hidden" href="shop-single-v2.html"><img alt="Product" src="{% static 'img/shop/catalog/61.jpg' %}"/></a>
-                <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">Smart Home</a>
-                    <h3 class="product-title fs-sm"><a href="shop-single-v2.html">Smart Speaker with Voice Control</a></h3>
-                    <div class="d-flex justify-content-between">
-                        <div class="product-price"><span class="text-accent">$49.<small>99</small></span></div>
-                        <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i
-                                class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body card-body-hidden">
-                    <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button"><i class="ci-cart fs-sm me-1"></i>Add to Cart</button>
-                    <div class="text-center"><a class="nav-link-style fs-ms" data-bs-toggle="modal" href="#quick-view-electro"><i class="ci-eye align-middle me-1"></i>Quick view</a></div>
-                </div>
-            </div>
-            <hr class="d-sm-none"/>
-        </div>
-        <!-- Product-->
-        <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-4">
-            <div class="card product-card">
-                <div class="product-card-actions d-flex align-items-center"><a class="btn-action nav-link-style me-2" href="#"><i class="ci-compare me-1"></i>Compare</a>
-                    <button aria-label="Add to wishlist" class="btn-wishlist btn-sm" data-bs-original-title="Add to wishlist" data-bs-placement="left" data-bs-toggle="tooltip" type="button"><i
-                            class="ci-heart"></i></button>
-                </div>
-                <a class="card-img-top d-block overflow-hidden" href="shop-single-v2.html"><img alt="Product" src="{% static 'img/shop/catalog/62.jpg' %}"/></a>
-                <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">Wearable Electronics</a>
-                    <h3 class="product-title fs-sm"><a href="shop-single-v2.html">Fitness GPS Smart Watch</a></h3>
-                    <div class="d-flex justify-content-between">
-                        <div class="product-price"><span class="text-accent">$317.<small>40</small></span></div>
-                        <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i
-                                class="star-rating-icon ci-star-half active"></i><i class="star-rating-icon ci-star"></i><i class="star-rating-icon ci-star"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body card-body-hidden">
-                    <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button"><i class="ci-cart fs-sm me-1"></i>Add to Cart</button>
-                    <div class="text-center"><a class="nav-link-style fs-ms" data-bs-toggle="modal" href="#quick-view-electro"><i class="ci-eye align-middle me-1"></i>Quick view</a></div>
-                </div>
-            </div>
-            <hr class="d-sm-none"/>
-        </div>
-        <!-- Product-->
-        <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-4">
-            <div class="card product-card">
-                <div class="product-card-actions d-flex align-items-center"><a class="btn-action nav-link-style me-2" href="#"><i class="ci-compare me-1"></i>Compare</a>
-                    <button aria-label="Add to wishlist" class="btn-wishlist btn-sm" data-bs-original-title="Add to wishlist" data-bs-placement="left" data-bs-toggle="tooltip" type="button"><i
-                            class="ci-heart"></i></button>
-                </div>
-                <a class="card-img-top d-block overflow-hidden" href="shop-single-v2.html"><img alt="Product" src="{% static 'img/shop/catalog/63.jpg' %}"/></a>
-                <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">Smartphones</a>
-                    <h3 class="product-title fs-sm"><a href="shop-single-v2.html">Popular Smartphone 128GB</a></h3>
-                    <div class="d-flex justify-content-between">
-                        <div class="product-price"><span class="text-accent">$965.<small>00</small></span></div>
-                        <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i
-                                class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body card-body-hidden">
-                    <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button"><i class="ci-cart fs-sm me-1"></i>Add to Cart</button>
-                    <div class="text-center"><a class="nav-link-style fs-ms" data-bs-toggle="modal" href="#quick-view-electro"><i class="ci-eye align-middle me-1"></i>Quick view</a></div>
-                </div>
-            </div>
-            <hr class="d-sm-none"/>
-        </div>
-        <!-- Product-->
-        <div class="col-lg-3 col-md-4 col-sm-6 px-2 mb-4">
-            <div class="card product-card"><span class="badge bg-info badge-shadow">New</span>
-                <div class="product-card-actions d-flex align-items-center"><a class="btn-action nav-link-style me-2" href="#"><i class="ci-compare me-1"></i>Compare</a>
-                    <button aria-label="Add to wishlist" class="btn-wishlist btn-sm" data-bs-original-title="Add to wishlist" data-bs-placement="left" data-bs-toggle="tooltip" type="button"><i
-                            class="ci-heart"></i></button>
-                </div>
-                <a class="card-img-top d-block overflow-hidden" href="shop-single-v2.html"><img alt="Product" src="{% static 'img/shop/catalog/64.jpg' %}"/></a>
-                <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">Wearable Electronics</a>
-                    <h3 class="product-title fs-sm"><a href="shop-single-v2.html">Smart Watch Series 5, Aluminium</a></h3>
-                    <div class="d-flex justify-content-between">
-                        <div class="product-price"><span class="text-accent">$349.<small>99</small></span></div>
-                        <div class="star-rating"><i class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-filled active"></i><i
-                                class="star-rating-icon ci-star-filled active"></i><i class="star-rating-icon ci-star-half active"></i><i class="star-rating-icon ci-star"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body card-body-hidden">
-                    <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button"><i class="ci-cart fs-sm me-1"></i>Add to Cart</button>
-                    <div class="text-center"><a class="nav-link-style fs-ms" data-bs-toggle="modal" href="#quick-view-electro"><i class="ci-eye align-middle me-1"></i>Quick view</a></div>
-                </div>
-            </div>
-            <hr class="d-sm-none"/>
-        </div>
-        <!-- Product-->
-        <div class="col-lg-3 col-md-4 col-sm-6 px-2">
-            <div class="card product-card">
-                <div class="product-card-actions d-flex align-items-center"><a class="btn-action nav-link-style me-2" href="#"><i class="ci-compare me-1"></i>Compare</a>
-                    <button aria-label="Add to wishlist" class="btn-wishlist btn-sm" data-bs-original-title="Add to wishlist" data-bs-placement="left" data-bs-toggle="tooltip" type="button"><i
-                            class="ci-heart"></i></button>
-                </div>
-                <a class="card-img-top d-block overflow-hidden" href="shop-single-v2.html"><img alt="Product" src="{% static 'img/shop/catalog/65.jpg' %}"/></a>
-                <div class="card-body py-2"><a class="product-meta d-block fs-xs pb-1" href="#">Computers</a>
-                    <h3 class="product-title fs-sm"><a href="shop-single-v2.html">Convertible 2-in-1 HD Laptop</a></h3>
-                    <div class="d-flex justify-content-between">
-                        <div class="product-price"><span class="text-accent">$412.<small>00</small></span></div>
-                    </div>
-                </div>
-                <div class="card-body card-body-hidden">
-                    <button class="btn btn-primary btn-sm d-block w-100 mb-2" type="button"><i class="ci-cart fs-sm me-1"></i>Add to Cart</button>
-                    <div class="text-center"><a class="nav-link-style fs-ms" data-bs-toggle="modal" href="#quick-view-electro"><i class="ci-eye align-middle me-1"></i>Quick view</a></div>
-                </div>
-            </div>
-        </div>
+            {% endif %}
+
+        {% endfor %}
     </div>
 </section>

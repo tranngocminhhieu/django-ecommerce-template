@@ -66,7 +66,7 @@
 
                                                             <!-- Select Parent Category -->
                                                             <li class="widget-list-item widget-filter-item">
-                                                                <a class="widget-list-link d-flex justify-content-between align-items-center" href="#" onclick="updateURL('category', '{{ category.name }}')">
+                                                                <a class="widget-list-link d-flex justify-content-between align-items-center" href="#" onclick="updateURL('category', '{{ category.slug }}')">
                                                                     <span class="widget-filter-item-text">View all</span>
                                                                     <span class="fs-xs text-muted ms-3">{{ category.product_set.count }}</span></a>
                                                             </li>
@@ -75,7 +75,7 @@
                                                             {% for child_category in product_categories %}
                                                                 {% if child_category.parent == category %}
                                                                     <li class="widget-list-item widget-filter-item">
-                                                                        <a class="widget-list-link d-flex justify-content-between align-items-center" href="#" onclick="updateURL('category', '{{ child_category.name }}')">
+                                                                        <a class="widget-list-link d-flex justify-content-between align-items-center" href="#" onclick="updateURL('category', '{{ child_category.slug }}')">
                                                                             <span class="widget-filter-item-text">{{ child_category.name }}</span>
                                                                             <span class="fs-xs text-muted ms-3">{{ child_category.product_set.count }}</span></a>
                                                                     </li>
@@ -140,7 +140,7 @@
                                     <li class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
                                         <div class="form-check">
                                             <input class="form-check-input brand-checkbox" type="checkbox"
-                                                   id="{{ brand.slug }}" {% if brand.name in brands %}checked{% endif %} value="{{ brand.name }}">
+                                                   id="{{ brand.slug }}" {% if brand.name in brands %}checked{% endif %} value="{{ brand.slug }}">
                                             <label class="form-check-label widget-filter-item-text"
                                                    for="{{ brand.slug }}">{{ brand.name }}</label>
                                         </div>

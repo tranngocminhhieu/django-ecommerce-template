@@ -1,13 +1,13 @@
 from django.shortcuts import render
-from products import models as products_models
+from products.models import Product
 
 # Create your views here.
 def home(request):
-    brands = products_models.Brand.objects.all()
+    trending_products = Product.objects.filter(categories__slug='trending')
+    products = Product.objects.all()
 
-    
-    # user
     context = {
-        'brands': brands
+        'trending_products': trending_products,
+        'products': products
     }
     return render(request=request, template_name='home/home.html', context=context)

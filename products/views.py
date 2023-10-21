@@ -82,9 +82,9 @@ def products(request):
     filters = Q(productvariant__price__range=[min_price, max_price])
 
     if brands:
-        filters &= Q(brand__name__in=brands)
+        filters &= Q(brand__slug__in=brands)
     if category:
-        filters &= Q(categories__name=category)
+        filters &= Q(categories__slug=category)
 
     products = Product.objects.filter(filters).distinct()
 
