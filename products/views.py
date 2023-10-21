@@ -78,6 +78,7 @@ def products(request):
     max_price = request.GET.get('max_price', 999999999)
     brands = request.GET.getlist('brand')
     category = request.GET.get('category')
+    keyword = request.GET.get('keyword')
 
     filters = Q(productvariant__price__range=[min_price, max_price])
 
@@ -85,6 +86,8 @@ def products(request):
         filters &= Q(brand__slug__in=brands)
     if category:
         filters &= Q(categories__slug=category)
+    if keyword:
+        filters &= Q(name__contains=keyword)
 
     products = Product.objects.filter(filters).distinct()
 

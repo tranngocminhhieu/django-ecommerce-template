@@ -26,7 +26,8 @@ def get_cart_info(order):
                 'color_name': product_variant.color.name,
                 'color_code': product_variant.color.color_code,
                 'color_image': product_variant.color.color_image or None,
-            }
+            },
+            'price': product_variant.price
         }
 
         product = product_variant.product

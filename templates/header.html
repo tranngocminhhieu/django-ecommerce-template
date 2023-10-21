@@ -59,9 +59,8 @@
                 <!-- Search-->
                 <div class="input-group d-none d-lg-flex flex-nowrap mx-4"><i
                         class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
-                    <input class="form-control rounded-start w-100"
-                           placeholder="Search for products" type="text"/>
-                    <select class="form-select flex-shrink-0" style="width: 10.5rem;">
+                    <input class="form-control rounded-start w-100" placeholder="Search for products" type="text"/>
+                    <select class="form-select flex-shrink-0" style="width: 10.5rem;" name="category">
                         <option>All categories</option>
                         {% for category in product_categories %}
                             <option>{{ category.name }}</option>

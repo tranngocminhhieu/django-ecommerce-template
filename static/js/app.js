@@ -168,7 +168,7 @@ const updateCart = async (data) => {
         let product = data['items'][i]['product']['name'];
         let slug = data['items'][i]['product']['slug'];
         let image = data['items'][i]['product']['image'];
-        let price = data['items'][i]['price'];
+        let price = data['items'][i]['product_variant']['price'];
         let quantity = data['items'][i]['quantity'];
         let version = data['items'][i]['product_variant']['version'];
         let color = data['items'][i]['product_variant']['color']['color_name'];

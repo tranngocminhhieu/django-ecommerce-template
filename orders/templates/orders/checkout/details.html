@@ -76,8 +76,7 @@
                             <div class="mb-3">
                                 <label class="form-label" for="checkout-fn">Full name</label>
                                 <input class="form-control" type="text" id="checkout-fn"
-                                       name="full_name" value="
-                                        {% if order.full_name %}{{ order.full_name }}{% endif %}">
+                                       name="full_name" value="{% if order.full_name %}{{ order.full_name }}{% endif %}">
                             </div>
                         </div>
                         <div class="col-sm-6">
