@@ -26,3 +26,4 @@ This is a project from a Django course I took. I chose the E-commerce topic beca
 5. Discount code.
 - Can only be used once per user.
 - Add maximum used quantity.
+6. Require users to fill in all information before going to the next step in the purchasing process.
