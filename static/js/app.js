@@ -564,14 +564,18 @@ for (let i = 0; i < brandCheckBoxes.length; i++) {
 // Keep scroll position when refresh in the same page
 // Reference https://stackoverflow.com/a/58743412/19919470
 document.addEventListener("DOMContentLoaded", () => {
+    // Get previous pathname and scroll position
     const scrollPosition = localStorage.getItem('scrollPosition');
     const scrollPathName = localStorage.getItem('scrollPathName');
+    // If new pathname is the same with previous pathname then scroll
     if (scrollPosition && scrollPathName && scrollPathName === window.location.pathname) {
         window.scrollTo(0, scrollPosition);
-    }
+    };
+    // Save new pathname
+    localStorage.setItem('scrollPathName', window.location.pathname);
 });
 
+// Save scroll position when scroll
 window.onbeforeunload = () => {
     localStorage.setItem('scrollPosition', window.scrollY);
-    localStorage.setItem('scrollPathName', window.location.pathname);
 };
